@@ -10,8 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const radioInt4 = 85; 
     const centroX = 267; // Centro del tablero (mitad de 500px)
     const centroY = 267;
-    let indexColor = 0; // Para ir recorriendo los colores
-    let casillasNormales = [];
 
   // Definimos el patrón de colores para las casillas manualmente
     const casillasColores = [
