@@ -9,18 +9,19 @@ public class Estadisticas extends HttpServlet {
     private static final String URL = "jdbc:mysql://localhost:3306/proyecto";
     private static final String USER = "root";
     private static final String PASSWORD = "";
-
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        try (PrintWriter out = response.getWriter();
-             Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement stmt = conn.prepareStatement(
+        try  {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            PrintWriter out = response.getWriter();
+            Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            PreparedStatement stmt = conn.prepareStatement(
                      "SELECT id_partida, id_jugador, id_categoria, acertadas, falladas, estrellas " +
                      "FROM estadisticas ORDER BY id_partida, id_categoria, id_jugador");
-             ResultSet rs = stmt.executeQuery()) {
-
+            ResultSet rs = stmt.executeQuery();
             // Renderizar la página de estadísticas
             renderStatsPage(out, rs);
 
