@@ -16,7 +16,7 @@ public class Login extends HttpServlet {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyecto", "root", "");
 
-            PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM jugadores WHERE Nombre = ? AND password = ?");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM jugadores WHERE Nombre = ? AND password = ?");
             ps.setString(1, nombre);
             ps.setString(2, pass);
             ResultSet rs = ps.executeQuery();
