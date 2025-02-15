@@ -3,6 +3,7 @@ import javax.servlet.*;
 import java.io.*;
 import java.sql.*;
 
+
 public class Estadisticas extends HttpServlet {
 
     private static final String URL = "jdbc:mysql://localhost:3306/proyecto";
