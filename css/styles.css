@@ -40,7 +40,6 @@ body {
     height: 500px;
     background-color: #d2a679;
     border-radius: 50%;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -60,13 +59,6 @@ body {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -52%) rotate(13deg);;
-    text-align: center;
-    line-height: 90px;
-    font-size: 32px;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
 }
 
@@ -78,16 +70,16 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 20px;
+    font-size: 15px;
     font-weight: bold;
     color: black;
     border: solid;
     background-color: gray;
-    transform: rotate(var(--angle)) translate(200px) rotate(calc(-1 * var(--angle)));
 }
 
 .especial {
     border: 3px dashed black;
+    font-size: 18px;
 }
 
 .normal {
@@ -95,14 +87,14 @@ body {
 }
 
 /* Colores de las categorías */
-.azul { background-color: #0066ff; }
+.azul { background-color: #3399ff; }
 .rojo { background-color: red; }
 .verde { background-color: #00cc00; }
 .amarillo { background-color: yellow; }
 .rosa { background-color: #ff3399; }
 .naranja { background-color: #ff6600; }
 .morado { background-color: #9900ff; }
-.blanco { background-color: white; }
+.blanco { background-color: white;}
 
 .form-input {
     display: flex;
@@ -119,5 +111,61 @@ body {
 
 .form-input input[type="submit"] {
     color: white;
+    cursor: pointer;
+}
+
+#dado-container {
+    position: absolute;
+    bottom: 20px; /* Ajusta la posición según tu tablero */
+    left: 70px;
+    text-align: center;
+}
+
+#dado {
+    width: 50px;
+    height: 50px;
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+#dado:hover {
+    transform: scale(1.1);
+}
+
+#resultado-dado {
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#ficha {
+    width: 15px;
+    height: 15px;
+    background-color: grey;
+    border-radius: 50%;
+    position: absolute;
+    transition: all 0.3s ease-in-out;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: black;
+    border: 2px solid black;
+}
+
+#controles {
+    display: none;
+    margin-top: 10px;
+}
+
+button {
+    font-size: 20px;
+    padding: 10px;
     cursor: pointer;
 }
