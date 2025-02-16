@@ -24,12 +24,12 @@ public class Login extends HttpServlet {
             if (rs.next()) {
                 //El usuario existe y la contraseña es correcta
                 HttpSession session = req.getSession(); // crea una sesión
-                session.setAttribute("usuario", nombre); // guarda el nombre del usuario en la sesión
-                session.setAttribute("idJugador", rs.getInt("IdJugador")); // guarda el id del usuario en la sesión
+                session.setAttribute("nombre", nombre); // guarda el nombre del usuario en la sesión
+                session.setAttribute("IdJugador", rs.getInt("IdJugador")); // guarda el id del usuario en la sesión
                 session.setMaxInactiveInterval(30 * 60); // La sesión dura 30 minutos
 
                 out.println("Inicio de sesión exitoso. ¡Bienvenido, " + nombre + "!");
-                res.sendRedirect("opcionesjuego.html");
+                res.sendRedirect("inicioPartida.html");
             } else {
                 out.println("Nombre de usuario o contraseña incorrectos");
             }

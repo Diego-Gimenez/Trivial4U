@@ -13,24 +13,19 @@ public class Estadisticas extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
 
         try  {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            PrintWriter out = response.getWriter();
             Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
             PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT id_partida, id_jugador, id_categoria, acertadas, falladas, estrellas " +
-                     "FROM estadisticas ORDER BY id_partida, id_categoria, id_jugador");
+                     "SELECT * FROM estadisticas ORDER BY id_partida, id_categoria, id_jugador");
             ResultSet rs = stmt.executeQuery();
             // Renderizar la página de estadísticas
             renderStatsPage(out, rs);
 
         } catch (Exception e) {
-            e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            try (PrintWriter out = response.getWriter()) {
-                out.println("<p>Error al procesar las estadísticas: " + e.getMessage() + "</p>");
-            }
+            out.println("<p>Error al procesar las estadísticas: " + e.getMessage() + "</p>");
         }
     }
 

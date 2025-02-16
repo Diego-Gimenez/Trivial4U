@@ -37,7 +37,7 @@ public class Registro extends HttpServlet {
                     stmt.executeUpdate();
                     out.println("Registro exitoso");
 
-                    res.sendRedirect("opcionesjuego.html");
+                    res.sendRedirect("inicioPartida.html");
 
                     stmt.close();
                 }
