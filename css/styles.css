@@ -9,31 +9,6 @@ body {
     margin: 0;
 }
 
-.welcome-container {
-    text-align: center;
-}
-
-.button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    margin: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 18px;
-    transition: background-color 0.3s;
-    text-decoration: none; /* Remueve subrayado de enlaces */
-}
-
-.button.new-player {
-    background-color: #28a745;
-}
-
-.button:hover {
-    opacity: 0.9;
-}
-
 .tablero {
     position: relative;
     width: 500px;
@@ -51,15 +26,15 @@ body {
     height: 100%;
 }
 
-.centro {
-    width: 130px;
-    height: 130px;
-    background-color: black;
+.quesito {
+    width: 150px;
+    height: 150px;
+    background-color: silver;
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -52%) rotate(13deg);;
-    clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
+    transform: translate(-40%, -50%);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
 
 .casilla {
@@ -124,11 +99,13 @@ body {
 #dado {
     width: 50px;
     height: 50px;
-    font-size: 40px;
+    font-size: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    background-color: #3399ff;
+    border-radius: 50%;
     transition: transform 0.3s ease-in-out;
 }
 
@@ -142,20 +119,33 @@ body {
     font-weight: bold;
 }
 
-#ficha {
+#ficha1 {
     width: 15px;
     height: 15px;
-    background-color: grey;
+    background-color: #3333cc;
     border-radius: 50%;
     position: absolute;
     transition: all 0.3s ease-in-out;
-    z-index: 10;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 10px;
-    font-weight: bold;
-    color: black;
+    color: white;
+    border: 2px solid black;
+}
+
+#ficha2 {
+    width: 15px;
+    height: 15px;
+    background-color: #cc0000;
+    border-radius: 50%;
+    position: absolute;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    color: white;
     border: 2px solid black;
 }
 

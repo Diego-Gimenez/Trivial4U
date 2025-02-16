@@ -4,10 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const totalCasillas = 49; // 5 de cada color
     const numRepeticiones = 7;
     const radioExterno = 218; // Distancia desde el centro
-    const radioInt1 = 185;
-    const radioInt2 = 152;
-    const radioInt3 = 118;
-    const radioInt4 = 85; 
+    const radioTriangulos = 90;
     const centroX = 267; // Centro del tablero (mitad de 500px)
     const centroY = 267;
 
@@ -51,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Calcular la posición de la casilla
         const angle = (i * 360 / totalCasillas) * (Math.PI / 180); // Convertir grados a radianes
-        const x = centroX + Math.cos(angle) * radioExterno - 30; // -30 para centrar la casilla
+        const x = centroX + Math.cos(angle) * radioExterno - 30; 
         const y = centroY + Math.sin(angle) * radioExterno - 30;
 
         casilla.style.left = `${x}px`;
@@ -61,66 +58,26 @@ document.addEventListener("DOMContentLoaded", () => {
         container.appendChild(casilla);
     }
   
-    // Crear pasarela interna
+  // Quesitos internos
     for (let i = 0; i < 7; i++) {
-        const colores = ["rojo", "naranja", "amarillo", "verde", "azul", "morado", "rosa"];
-        const color = colores[i]; // Una casilla de cada color
-        const angle = (i * 360 / 7) * (Math.PI / 180); // Equiespaciadas cada 60°
-        const x = centroX + Math.cos(angle) * radioInt1 - 30;
-        const y = centroY + Math.sin(angle) * radioInt1 - 30;
+    const colores = ["morado", "rojo", "azul", "naranja", "amarillo", "rosa", "verde"];
+    const color = colores[i]; 
+    const angle = (i * 360 / 7); // Cada 360/7 grados
+    const radianes = angle * (Math.PI / 180); // Convertir a radianes
 
-        const casilla = document.createElement("div");
-        casilla.classList.add("casilla", color, "normal");
-        casilla.style.left = `${x}px`;
-        casilla.style.top = `${y}px`;
+    const x = centroX + Math.cos(radianes) * radioTriangulos - 93;
+    const y = centroY + Math.sin(radianes) * radioTriangulos - 92;
 
-        container.appendChild(casilla);
-    }
-  
-    for (let i = 0; i < 7; i++) {
-        const colores = ["rosa", "verde", "naranja", "amarillo", "verde", "azul", "morado"];
-        const color = colores[i]; // Una casilla de cada color
-        const angle = (i * 360 / 7) * (Math.PI / 180); // Equiespaciadas cada 60°
-        const x = centroX + Math.cos(angle) * radioInt2 - 30;
-        const y = centroY + Math.sin(angle) * radioInt2 - 30;
+    const casilla = document.createElement("div");
+    casilla.classList.add("quesito", color);
+    casilla.style.left = `${x}px`;
+    casilla.style.top = `${y}px`;
 
-        const casilla = document.createElement("div");
-        casilla.classList.add("casilla", color, "normal");
-        casilla.style.left = `${x}px`;
-        casilla.style.top = `${y}px`;
+    // Rotar para que apunte al centro
+    casilla.style.transform = `rotate(${angle - 90}deg)`;
 
-        container.appendChild(casilla);
-    }
-  
-    for (let i = 0; i < 7; i++) {
-        const colores = ["azul", "morado", "rosa", "rojo", "naranja", "amarillo", "rojo"];
-        const color = colores[i]; // Una casilla de cada color
-        const angle = (i * 360 / 7) * (Math.PI / 180); // Equiespaciadas cada 60°
-        const x = centroX + Math.cos(angle) * radioInt3 - 30;
-        const y = centroY + Math.sin(angle) * radioInt3 - 30;
-
-        const casilla = document.createElement("div");
-        casilla.classList.add("casilla", color, "normal");
-        casilla.style.left = `${x}px`;
-        casilla.style.top = `${y}px`;
-
-        container.appendChild(casilla);
-    }
-  
-    for (let i = 0; i < 7; i++) {
-        const colores = ["verde", "azul", "morado", "rosa", "rojo", "naranja", "amarillo"];
-        const color = colores[i]; // Una casilla de cada color
-        const angle = (i * 360 / 7) * (Math.PI / 180); // Equiespaciadas cada 60°
-        const x = centroX + Math.cos(angle) * radioInt4 - 30;
-        const y = centroY + Math.sin(angle) * radioInt4 - 30;
-
-        const casilla = document.createElement("div");
-        casilla.classList.add("casilla", color, "normal");
-        casilla.style.left = `${x}px`;
-        casilla.style.top = `${y}px`;
-
-        container.appendChild(casilla);
-    }
+    container.appendChild(casilla);
+}
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -150,8 +107,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (index < ordenCasillas.length) {
         const casillaIndex = ordenCasillas[index]; // Obtener la casilla en el orden personalizado
         const casilla = casillas[casillaIndex]; // Buscar la casilla en la lista general
-        ficha.style.left = `${casilla.offsetLeft + 5}px`; // Ajustar posición
-        ficha.style.top = `${casilla.offsetTop + 5}px`;
+        ficha1.style.left = `${casilla.offsetLeft + 5}px`; // Ajustar posición
+        ficha1.style.top = `${casilla.offsetTop + 5}px`;
     }
 }
 
@@ -195,43 +152,5 @@ document.addEventListener("DOMContentLoaded", () => {
             dado.disabled = false; // Reactivar el dado para la siguiente tirada
         }
     }, 500); // ⏳ Controlamos la velocidad de movimiento
-    verificarCasillaEspecial();
 }
-
-  const casillasEspeciales = [0, 7, 14, 21, 28, 35, 42];
-  const rutasAlternativas = {
-    0: [49, 56, 63, 70, 63, 56, 49, 0],
-    7: [50, 57, 64, 71, 64, 57, 50, 7],
-    14: [51, 58, 65, 72, 65, 58, 51, 14],
-    21: [52, 59, 66, 73, 66, 59, 52, 21],
-    28: [53, 60, 67, 74, 67, 60, 53, 28],
-    35: [54, 61, 68, 75, 68, 61, 54, 35],
-    42: [55, 62, 69, 76, 69, 62, 55, 42]
-};
-
-
-function verificarCasillaEspecial() {
-    const flechaArriba = document.getElementById("flechaArriba");
-
-    // Si la casilla actual está en las rutas especiales, mostrar la flecha
-    if (rutasAlternativas.hasOwnProperty(posicionFicha)) {
-        flechaArriba.style.display = "inline-block";
-    } else {
-        flechaArriba.style.display = "none";
-    }
-}
-
-document.getElementById("flechaArriba").addEventListener("click", () => {
-    if (rutasAlternativas.hasOwnProperty(posicionFicha)) {
-        let ruta = rutasAlternativas[posicionFicha]; // Obtiene la ruta correcta
-        let indiceActual = ruta.indexOf(posicionFicha);
-        
-        if (indiceActual !== -1 && indiceActual < ruta.length - 1) {
-            let nuevaPosicion = ruta[indiceActual + 1]; // Mover a la siguiente casilla en la ruta especial
-            moverFicha(nuevaPosicion);
-        }
-    }
-});
-
-
 });
