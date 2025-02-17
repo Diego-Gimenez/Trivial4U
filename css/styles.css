@@ -111,13 +111,7 @@ body {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    background-color: #3333cc;
-    border-radius: 50%;
     transition: transform 0.3s ease-in-out;
-}
-
-#dado2 {
-  background-color: #cc0000;
 }
 
 .dado:hover {
@@ -133,7 +127,7 @@ body {
 .ficha {
     width: 15px;
     height: 15px;
-    background-color: #3333cc;
+    background-color: purple;
     border-radius: 50%;
     position: absolute;
     transition: all 0.3s ease-in-out;
@@ -146,11 +140,10 @@ body {
 }
 
 #ficha2 {
-    background-color: #cc0000;
+    background-color: orange;
 }
 
 #controles {
-    display: none;
     margin-top: 10px;
 }
 

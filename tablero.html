@@ -1,33 +1,143 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trivial Circular Equiespaciado</title>
+    <title>Trivial</title>
     <link rel="stylesheet" href="./css/styles.css">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 400px;
+            height: 400px;
+        }
+        td {
+            width: 50px;
+            height: 40px;
+            border: 2px solid black;
+            text-align: center;
+            font-size: 25px;
+        }
+    </style>
 </head>
+
 <body>
-    <div class="tablero">
-        <div class="centro"></div>
-        <div id="casillas-container"></div>
-      <div id="ficha1" class="ficha" data-posicion="0">1</div>
-      <div id="ficha2" class="ficha" data-posicion="0">2</div>
+    <div style="position: relative; display: inline-block;">
+    <table>
+        <tr>
+            <td background-color="red"></td>
+            <td background-color="green"></td>
+            <td background-color="white"></td>
+            <td background-color="yellow"></td>
+            <td background-color="blue">▼</td>
+            <td background-color="red"></td>
+            <td background-color="white"></td>
+            <td background-color="yellow"></td>
+            <td background-color="green"></td>
+        </tr>
+        <tr>
+            <td background-color="yellow"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="green"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="blue"></td>
+        </tr>
+        <tr>
+            <td background-color="white"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="red"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="white"></td>
+        </tr>
+        <tr>
+            <td background-color="blue"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="yellow"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="red"></td>
+        </tr>
+                <tr>
+            <td background-color="green">▶</td>
+            <td background-color="yellow"></td>
+            <td background-color="red"></td>
+            <td background-color="blue"></td>
+            <td background-color="grey">★</td>
+            <td background-color="red"></td>
+            <td background-color="green"></td>
+            <td background-color="blue"></td>
+            <td background-color="yellow">◀</td>
+        </tr>
+        <tr>
+            <td background-color="red"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="green"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="green"></td>
+        </tr>
+        <tr>
+            <td background-color="white"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="yellow"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="white"></td>
+        </tr>
+        <tr>
+            <td background-color="blue"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="blue"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="black"></td>
+            <td background-color="yellow"></td>
+        </tr>
+        <tr>
+            <td background-color="yellow"></td>
+            <td background-color="green"></td>
+            <td background-color="white"></td>
+            <td background-color="yellow"></td>
+            <td background-color="red">▲</td>
+            <td background-color="green"></td>
+            <td background-color="white"></td>
+            <td background-color="red"></td>
+            <td background-color="blue"></td>
+        </tr>
+    </table>
+
+    <div id="ficha" class="ficha">1</div> 
     </div>
-    <script src="./js/script.js" defer></script>
-  <div id="dado-container">
+    <br><br>
+    <div id="dado-container">
     <div id="dado1" class="dado">🎲</div>
-    <p id="resultadoDado1">Lanzar dado J1</p>
+    <div id="resultadoDado1">Lanzar dado</div>
     <div id="controles">
-    <button id="flechaIzquierda">⟲</button>
-    <button id="flechaDerecha">⟳</button>
-</div>
-<div id="dado-container2">
-    <div id="dado2" class="dado">🎲</div>
-    <p id="resultadoDado2">Lanzar dado J2</p>
-    <div id="controles2">
-    <button id="flechaIzquierda2">⟲</button>
-    <button id="flechaDerecha2">⟳</button>
-</div>
-</div>
+        <button>⬆</button>
+        <button>⬅</button>
+        <button>➡</button>
+        <button>⬇</button>
+    </div>
+  </div>
 </body>
 </html>
