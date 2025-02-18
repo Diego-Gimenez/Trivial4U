@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Crear Nueva Partida - Trivial4U</title>
+        <link rel="stylesheet" href="css/styles.css">
+        <style>
+            .create-game-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }
+
+            .form-input {
+                margin: 10px 0;
+            }
+
+            .form-input input[type="text"] {
+                padding: 10px;
+                width: 200px;
+                font-size: 16px;
+                margin-top: 5px;
+            }
+
+            .form-input input[type="submit"] {
+                background-color: #28a745;
+                color: white;
+                font-size: 16px;
+                border: none;
+                padding: 10px 20px;
+                cursor: pointer;
+            }
+
+            .form-input input[type="submit"]:hover {
+                background-color: #218838;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="create-game-container">
+            <h1>Crear Nueva Partida</h1>
+            <form action="CrearPartida" method="POST">
+                <!-- Campo para nombre de la partida -->
+                <div class="form-input">
+                    <label for="nombrePartida">Nombre de la Partida:</label>
+                    <input type="text" id="nombrePartida" name="nombrePartida" placeholder="Introduce el nombre de la partida" required>
+                </div>
+                <!-- Botón para enviar el formulario -->
+                <div class="form-input">
+                    <input type="submit" value="Crear Partida">
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

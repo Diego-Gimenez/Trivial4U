@@ -19,7 +19,7 @@ public class Estadisticas extends HttpServlet {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
             PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT * FROM estadisticas ORDER BY id_partida, id_categoria, id_jugador");
+                     "SELECT * FROM estadisticas ORDER BY idPartida, idCategoria, idJugador");
             ResultSet rs = stmt.executeQuery();
             // Renderizar la página de estadísticas
             renderStatsPage(out, rs);

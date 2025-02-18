@@ -42,6 +42,15 @@
             <servlet-name>Estadisticas</servlet-name>
             <url-pattern>/Estadisticas</url-pattern>
         </servlet-mapping>
+
+        <servlet>
+            <servlet-name>CrearPartida</servlet-name>
+            <servlet-class>CrearPartida</servlet-class>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>CrearPartida</servlet-name>
+            <url-pattern>/CrearPartida</url-pattern>
+        </servlet-mapping>
         
         <session-config>
             <session-timeout>30</session-timeout>
