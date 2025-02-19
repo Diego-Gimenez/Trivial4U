@@ -12,7 +12,8 @@ public class Estadisticas extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = new PrintWriter(response.getOutputStream(), true, java.nio.charset.StandardCharsets.UTF_8);
 
         // Obtener el IdJugador desde la sesión
         HttpSession session = request.getSession(false);
@@ -33,14 +34,14 @@ public class Estadisticas extends HttpServlet {
             stmt.setInt(1, IdJugador);
             ResultSet rs = stmt.executeQuery();
 
-            out.println("<html lang='es'><head><meta charset='UTF-8'><title>Mis Estadísticas</title>");
+            out.println("<html lang='es'><head><meta charset='UTF-8'><title>Mis Estadisticas</title>");
             out.println("<style>body { font-family: Arial, sans-serif; text-align: center; } ");
             out.println("table {width: 60%; margin: 20px auto; border-collapse: collapse;}");
             out.println("th, td {padding: 10px; border: 1px solid #ddd; text-align: center;}");
             out.println("th {background-color: #f2f2f2;}</style>");
             out.println("</head><body>");
-            out.println("<h1>Estadísticas del Jugador</h1>");
-            out.println("<table><tr><th>Categoría</th><th>Acertadas</th><th>Falladas</th></tr>");
+            out.println("<h1>Estadisticas del Jugador</h1>");
+            out.println("<table><tr><th>Categoria</th><th>Acertadas</th><th>Falladas</th></tr>");
     
             boolean hayResultados = false;
             while (rs.next()) {
@@ -50,7 +51,7 @@ public class Estadisticas extends HttpServlet {
             }
     
             if (!hayResultados) {
-                out.println("<tr><td colspan='3'>No hay datos de estadísticas.</td></tr>");
+                out.println("<tr><td colspan='3'>No hay datos de estadisticas.</td></tr>");
             }
     
             out.println("</table>");
