@@ -13,7 +13,8 @@ public class Estadisticas extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
-        PrintWriter out = new PrintWriter(response.getOutputStream(), true, java.nio.charset.StandardCharsets.UTF_8);
+        PrintWriter out = response.getWriter();
+        response.setCharacterEncoding("UTF-8");
 
         // Obtener el IdJugador desde la sesión
         HttpSession session = request.getSession(false);
