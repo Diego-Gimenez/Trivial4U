@@ -14,7 +14,6 @@ public class Estadisticas extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
-        response.setCharacterEncoding("UTF-8");
 
         // Obtener el IdJugador desde la sesión
         HttpSession session = request.getSession(false);

@@ -60,6 +60,24 @@
             <servlet-name>Logout</servlet-name>
             <url-pattern>/Logout</url-pattern>
         </servlet-mapping>
+
+        <servlet>
+            <servlet-name>Preguntas</servlet-name>
+            <servlet-class>Preguntas</servlet-class>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>Preguntas</servlet-name>
+            <url-pattern>/Preguntas</url-pattern>
+        </servlet-mapping>
+
+        <servlet>
+            <servlet-name>ValidarRespuesta</servlet-name>
+            <servlet-class>ValidarRespuesta</servlet-class>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>ValidarRespuesta</servlet-name>
+            <url-pattern>/ValidarRespuesta</url-pattern>
+        </servlet-mapping>
         
         <session-config>
             <session-timeout>30</session-timeout>
