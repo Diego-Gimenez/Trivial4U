@@ -71,12 +71,12 @@
         </servlet-mapping>
 
         <servlet>
-            <servlet-name>validarRespuesta</servlet-name>
-            <servlet-class>validarRespuesta</servlet-class>
+            <servlet-name>ValidarRespuesta</servlet-name>
+            <servlet-class>ValidarRespuesta</servlet-class>
         </servlet>
         <servlet-mapping>
-            <servlet-name>validarRespuesta</servlet-name>
-            <url-pattern>/validarRespuesta</url-pattern>
+            <servlet-name>ValidarRespuesta</servlet-name>
+            <url-pattern>/ValidarRespuesta</url-pattern>
         </servlet-mapping>
         
         <servlet>
