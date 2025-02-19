@@ -14,8 +14,11 @@ public class enJuego extends HttpServlet {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyecto", "root", "");
 
-            // Consulta para obtener partidas activas
-            String sql = "SELECT IdPartida, nombrePartida, idCreador FROM partida WHERE activa = 1";
+            // Consulta para obtener partidas activas con el nombre del creador
+            String sql = "SELECT p.IdPartida, p.nombrePartida, j.nombre AS nombreCreador " +
+                         "FROM partida p " +
+                         "JOIN jugadores j ON p.idCreador = j.idJugador " +
+                         "WHERE p.activa = 1";
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
@@ -28,12 +31,12 @@ public class enJuego extends HttpServlet {
             while (rs.next()) {
                 int idPartida = rs.getInt("IdPartida");
                 String nombrePartida = rs.getString("nombrePartida");
-                String creador = rs.getString("idcreador");
+                String nombreCreador = rs.getString("nombreCreador");
 
                 out.println("<tr>");
                 out.println("<td>" + idPartida + "</td>");
                 out.println("<td>" + nombrePartida + "</td>");
-                out.println("<td>" + creador + "</td>");
+                out.println("<td>" + nombreCreador + "</td>");
                 out.println("</tr>");
             }
             out.println("</table>");
