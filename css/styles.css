@@ -62,21 +62,6 @@ body {
     clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
 
-.casilla {
-    position: absolute;
-    width: 21px;
-    height: 21px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 15px;
-    font-weight: bold;
-    color: black;
-    border: solid;
-    background-color: gray;
-}
-
 .especial {
     border: 3px dashed black;
     font-size: 18px;
@@ -118,13 +103,6 @@ body {
     position: absolute;
     bottom: 20px; 
     left: 70px;
-    text-align: center;
-}
-
-#dado-container2 {
-    position: absolute;
-    bottom: 0px;
-    left: 600px;
     text-align: center;
 }
 
