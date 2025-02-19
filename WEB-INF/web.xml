@@ -79,6 +79,15 @@
             <url-pattern>/validarRespuesta</url-pattern>
         </servlet-mapping>
         
+        <servlet>
+            <servlet-name>enJuego</servlet-name>
+            <servlet-class>enJuego</servlet-class>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>enJuego</servlet-name>
+            <url-pattern>/enJuego</url-pattern>
+        </servlet-mapping>
+
         <session-config>
             <session-timeout>30</session-timeout>
         </session-config>
