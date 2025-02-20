@@ -10,44 +10,43 @@ public class enJuego extends HttpServlet {
         PrintWriter out = res.getWriter();
 
         try {
-            // Cargar el driver de MySQL
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyecto", "root", "");
 
-            // Consulta para obtener partidas activas con el nombre del creador
-            String sql = "SELECT p.IdPartida, p.nombrePartida, j.nombre AS nombreCreador " +
+            String sql = "SELECT p.IdPartida, p.nombrePartida, " +
+                         "j1.nombre AS nombreCreador, " +
+                         "j2.nombre AS nombreContrincante " +
                          "FROM partida p " +
-                         "JOIN jugadores j ON p.idCreador = j.idJugador " +
+                         "JOIN jugadores j1 ON p.idCreador = j1.idJugador " +
+                         "LEFT JOIN jugadores j2 ON p.contrincante = j2.idJugador " +
                          "WHERE p.activa = 1";
+
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
-            // HTML de la respuesta
-            out.println("<html><head><title>Partidas en Juego</title></head><body>");
-            out.println("<h1>Partidas en Juego</h1>");
-            out.println("<table border='1'><tr><th>ID</th><th>Nombre de Partida</th><th>Creador</th></tr>");
-
-            // Iterar sobre los resultados
             while (rs.next()) {
                 int idPartida = rs.getInt("IdPartida");
                 String nombrePartida = rs.getString("nombrePartida");
                 String nombreCreador = rs.getString("nombreCreador");
+                String nombreContrincante = rs.getString("nombreContrincante");
+
+                if (nombreContrincante == null) {
+                    nombreContrincante = "Esperando...";
+                }
 
                 out.println("<tr>");
                 out.println("<td>" + idPartida + "</td>");
                 out.println("<td>" + nombrePartida + "</td>");
                 out.println("<td>" + nombreCreador + "</td>");
+                out.println("<td>" + nombreContrincante + "</td>");
                 out.println("</tr>");
             }
-            out.println("</table>");
-            out.println("</body></html>");
 
-            // Cerrar conexiones
             rs.close();
             ps.close();
             con.close();
         } catch (Exception e) {
-            out.println("Error al obtener las partidas: " + e.getMessage());
+            out.println("<tr><td colspan='4'>Error al obtener las partidas: " + e.getMessage() + "</td></tr>");
         }
         out.close();
     }

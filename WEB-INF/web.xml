@@ -106,6 +106,15 @@
             <url-pattern>/MoverFicha</url-pattern>
         </servlet-mapping>
 
+        <servlet>
+            <servlet-name>unirsePartida</servlet-name>
+            <servlet-class>unirsePartida</servlet-class>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>unirsePartida</servlet-name>
+            <url-pattern>/unirsePartida</url-pattern>
+        </servlet-mapping>
+
         <session-config>
             <session-timeout>30</session-timeout>
         </session-config>
