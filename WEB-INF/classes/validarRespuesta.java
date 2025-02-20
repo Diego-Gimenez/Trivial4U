@@ -10,7 +10,8 @@ public class validarRespuesta extends HttpServlet {
         PrintWriter out;
         String respuestaCorrecta;
         String pregunta = req.getParameter("IdPregunta");
-        String respuesta = req.getParameter("Respuesta");
+        String respuesta = req.getParameter("respuesta");
+        
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyecto", "root", "");
@@ -20,20 +21,26 @@ public class validarRespuesta extends HttpServlet {
                 out = res.getWriter();
                 res.setContentType("text/html");
 
-                out.println("<HTML><BODY>");
-                if (respuestaCorrecta == respuesta) {
-                    out.println("<INPUT TYPE=TEXT VALUE=Respuesta correcta");
-                    // Continua el turno del jugador
-                    // Permitir otro lanzamiento de dado
-                    // Si la casilla es especial, se añade quesito
-                }
-                else {
-                    out.println("<INPUT TYPE=TEXT VALUE=Respuesta incorrecta");
-                    // Termina el turno del jugador
-                    // No se añade nada
-                }
-                out.println("</BODY><HTML>");
+                if (rs.next()) {
+                    respuestaCorrecta = rs.getString("Correcta");
 
+                    out.println("<HTML><BODY>");
+                    if (respuesta.equals(respuestaCorrecta)) {
+                        out.println("<h2>¡Correcto!</h2>");
+                        out.println("<p>Puedes continuar avanzando.</p>");
+                        // Continua el turno del jugador
+                        // Permitir otro lanzamiento de dado
+                        // Si la casilla es especial, se añade quesito
+                    } else {
+                        out.println("<h2>¡Incorrecto!</h2>");
+                        out.println("<p>Lo sentimos, la respuesta correcta era: " + respuestaCorrecta + "</p>");
+                        // Termina el turno del jugador
+                        // No se añade nada
+                    }
+                }
+                out.println("<a href='index.html'>Volver al juego</a>");
+                out.println("</BODY><HTML>");
+                
                 rs.close();
                 st.close();
                 con.close();
