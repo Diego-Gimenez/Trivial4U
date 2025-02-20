@@ -28,11 +28,11 @@
         <tr>
             <td class="verde">▲</td>
             <td class="rosa"></td>
-            <td class="blanco"></td>
+            <td class="blanco">🎲</td>
             <td class="rojo"></td>
             <td class="verde"></td>
             <td class="rosa"></td>
-            <td class="blanco"></td>
+            <td class="blanco">🎲</td>
             <td class="rojo"></td>
             <td class="azul">▲</td>
         </tr>
@@ -48,15 +48,15 @@
             <td class="verde"></td>
         </tr>
         <tr>
-            <td class="blanco"></td>
+            <td class="blanco">🎲</td>
             <td class="negro"></td>
             <td class="negro"></td>
             <td class="negro"></td>
-            <td class="blanco"></td>
+            <td class="blanco">🎲</td>
             <td class="negro"></td>
             <td class="negro"></td>
             <td class="negro"></td>
-            <td class="blanco"></td>
+            <td class="blanco">🎲</td>
         </tr>
         <tr>
             <td class="rojo"></td>
@@ -72,11 +72,11 @@
         <tr>
             <td class="rosa"></td>
             <td class="verde"></td>
-            <td class="blanco"></td>
+            <td class="blanco">🎲</td>
             <td class="azul"></td>
-            <td class="gris"></td>
+            <td class="gris">★</td>
             <td class="rosa"></td>
-            <td class="blanco"></td>
+            <td class="blanco">🎲</td>
             <td class="rojo"></td>
             <td class="azul"></td>
         </tr>
@@ -92,15 +92,15 @@
             <td class="verde"></td>
         </tr>
         <tr>
-            <td class="blanco"></td>
+            <td class="blanco">🎲</td>
             <td class="negro"></td>
             <td class="negro"></td>
             <td class="negro"></td>
-            <td class="blanco"></td>
+            <td class="blanco">🎲</td>
             <td class="negro"></td>
             <td class="negro"></td>
             <td class="negro"></td>
-            <td class="blanco"></td>
+            <td class="blanco">🎲</td>
         </tr>
         <tr>
             <td class="rojo"></td>
@@ -116,11 +116,11 @@
         <tr>
             <td class="rosa">▲</td>
             <td class="verde"></td>
-            <td class="blanco"></td>
+            <td class="blanco">🎲</td>
             <td class="azul"></td>
             <td class="rojo"></td>
             <td class="verde"></td>
-            <td class="blanco"></td>
+            <td class="blanco">🎲</td>
             <td class="azul"></td>
             <td class="rojo">▲</td>
         </tr>
@@ -130,13 +130,17 @@
     </div>
     <br><br>
     <div id="dado-container">
-    <div id="dado1" class="dado">🎲</div>
-    <div id="resultadoDado1">Lanzar dado</div>
+    <form action="Dado" method="post">
+        <button type="submit" id="dado1">🎲</button>
+    </form>
+    <p id="resultadoDado1">Lanzar dado</p>
     <div id="controles">
-        <button>⬆</button>
-        <button>⬅</button>
-        <button>➡</button>
-        <button>⬇</button>
+        <form action="MoverFicha" method="post">
+            <button type="submit" name="direccion" value="arriba">⬆</button>
+            <button type="submit" name="direccion" value="izquierda">⬅</button>
+            <button type="submit" name="direccion" value="derecha">➡</button>
+            <button type="submit" name="direccion" value="abajo">⬇</button>
+        </form>
     </div>
   </div>
 </body>

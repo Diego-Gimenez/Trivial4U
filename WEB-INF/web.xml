@@ -88,6 +88,24 @@
             <url-pattern>/enJuego</url-pattern>
         </servlet-mapping>
 
+        <servlet>
+            <servlet-name>Dado</servlet-name>
+            <servlet-class>Dado</servlet-class>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>Dado</servlet-name>
+            <url-pattern>/Dado</url-pattern>
+        </servlet-mapping>
+
+        <servlet>
+            <servlet-name>MoverFicha</servlet-name>
+            <servlet-class>MoverFicha</servlet-class>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>MoverFicha</servlet-name>
+            <url-pattern>/MoverFicha</url-pattern>
+        </servlet-mapping>
+
         <session-config>
             <session-timeout>30</session-timeout>
         </session-config>
