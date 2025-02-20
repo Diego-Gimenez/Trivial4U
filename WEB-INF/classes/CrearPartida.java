@@ -43,8 +43,10 @@ public class CrearPartida extends HttpServlet {
 
                     session.setAttribute("IdPartida", idPartidaGenerada);  // Guardar el id de la partida en la sesión
                     session.setAttribute("Turno", 1);  // Guardar el turno en la sesión
-                    ps2.close();}
-
+                    ps2.close();
+                }
+                
+                rs.close();
                 // Mostrar un mensaje con el idPartida o redirigir a la página de inicio de partida
                 out.println("<h2>Partida con ID " + idPartidaGenerada + " creada exitosamente.</h2>");
                 res.sendRedirect("tablero.html");  // Redirigir a la página principal de la partida
