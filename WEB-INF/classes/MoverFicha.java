@@ -38,45 +38,60 @@ public class MoverFicha extends HttpServlet {
                             break;
                     }
     
-                // Verificar la nueva posición
-                PreparedStatement checkStmt = con.prepareStatement("SELECT IdTipo, IdCategoria FROM tablero WHERE NumeroCasilla = ?");
-                checkStmt.setInt(1, nuevaPosicion);
-                ResultSet checkRs = checkStmt.executeQuery();
+                    // Verificar la nueva posición
+                    PreparedStatement checkStmt = con.prepareStatement("SELECT IdTipo, IdCategoria FROM tablero WHERE NumeroCasilla = ?");
+                    checkStmt.setInt(1, nuevaPosicion);
+                    ResultSet checkRs = checkStmt.executeQuery();
 
-                if (checkRs.next() && checkRs.getObject("IdTipo") != null) {  // No es negra
-                    // Actualizar la posición de la ficha
-                    PreparedStatement updateStmt = con.prepareStatement("UPDATE ficha SET posicion = ? WHERE id = 1");
-                    updateStmt.setInt(1, nuevaPosicion);
-                    updateStmt.executeUpdate();
+                    if (checkRs.next() && checkRs.getObject("IdTipo") != null) {  // No es negra
+                        // Actualizar la posición de la ficha
+                        PreparedStatement updateStmt = con.prepareStatement("UPDATE ficha SET posicion = ? WHERE id = 1");
+                        updateStmt.setInt(1, nuevaPosicion);
+                        updateStmt.executeUpdate();
 
-                    if (checkRs.getObject("IdCategoria") != null) { // Si hay categoría, obtener pregunta
-                        int categoria = checkRs.getInt("IdCategoria");
-                        PreparedStatement preguntaStmt = con.prepareStatement("SELECT Texto FROM preguntas WHERE IdCategoria = ? ORDER BY RAND() LIMIT 1");
-                        preguntaStmt.setInt(1, categoria);
-                        ResultSet preguntaRs = preguntaStmt.executeQuery();
+                        if (checkRs.getObject("IdCategoria") != null) { // Si hay categoría, obtener pregunta
+                            int categoria = checkRs.getInt("IdCategoria");
+                            PreparedStatement preguntaStmt = con.prepareStatement("SELECT Texto, Respuesta1, Respuesta2, Respuesta3, Respuesta4 FROM preguntas WHERE IdCategoria = ? ORDER BY RAND() LIMIT 1");
+                            preguntaStmt.setInt(1, categoria);
+                            ResultSet preguntaRs = preguntaStmt.executeQuery();
                         
-                        if (preguntaRs.next()) {
-                            String pregunta = preguntaRs.getString("Texto");
-                            res.getWriter().write("Pregunta: " + pregunta);
+                            if (preguntaRs.next()) {
+                                String pregunta = preguntaRs.getString("Texto");
+                                String res1 = preguntaRs.getString("Respuesta1");
+                                String res2 = preguntaRs.getString("Respuesta2");
+                                String res3 = preguntaRs.getString("Respuesta3");
+                                String res4 = preguntaRs.getString("Respuesta4");
+
+                                out.println("<html><body>");
+                                out.println("<h2>" + pregunta + "</h2>");
+                                out.println("<form action='validarRespuesta' method='POST'>");
+                                out.println("<input type='radio' name='respuesta' value='" + res1 + "' required> " + res1 + "<br>");
+                                out.println("<input type='radio' name='respuesta' value='" + res2 + "'> " + res2 + "<br>");
+                                out.println("<input type='radio' name='respuesta' value='" + res3 + "'> " + res3 + "<br>");
+                                out.println("<input type='radio' name='respuesta' value='" + res4 + "'> " + res4 + "<br>");
+                                out.println("<input type='submit' value='Responder'>");
+                                out.println("</form>");
+                                out.println("</body></html>");
+
+                            } else {
+                            out.println("<p>No hay preguntas disponibles en esta categoría.</p>");
+                            }
                         }
-                    }
-                    
-                    else { 
+                    } else { 
                         res.getWriter().write("Vuelve a lanzar el dado");
                     }
                 }
-
-            }
 
                 rs.close();
                 st.close();
                 con.close();
                 out.close();
             }
+
             catch (Exception e) {
                 System.err.println(e);
             }
 
-            res.sendRedirect("tablero.html");
+    res.sendRedirect("tablero.html");
     }
 }
