@@ -23,7 +23,7 @@ body {
     cursor: pointer;
     font-size: 18px;
     transition: background-color 0.3s;
-    text-decoration: none; /* Remueve subrayado de enlaces */
+    text-decoration: none; 
 }
 
 .button.new-player {
@@ -51,31 +51,12 @@ body {
     height: 100%;
 }
 
-.quesito {
-    width: 150px;
-    height: 150px;
-    background-color: silver;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-40%, -50%);
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-}
-
-.especial {
-    border: 3px dashed black;
-    font-size: 18px;
-}
-
-.normal {
-    border: 3px solid black;
-}
-
 /* Colores de las categorías */
 .azul { background-color: #3399ff; } /* Geografia */
 .rojo { background-color: red; } /* Cultura General */
 .verde { background-color: #00cc00; } /* Ciencia y Naturaleza */
-.rosa { background-color: #ff3399; } /* Entretenimiento */
+.rosa { background-color: #ff3399; } 
+.amarillo { background-color: #ffea00 } /* Entretenimiento */
 .blanco { background-color: white;} /* Volver a tirar */
 .negro { background-color: black;} /* Centro tablero */
 .gris { background-color: #666666;} /* Inicio partida */
@@ -101,9 +82,10 @@ body {
 
 #dado-container {
     position: absolute;
-    bottom: 20px; 
-    left: 70px;
+    top: 70px; 
+    left: 120px;
     text-align: center;
+    color: white;
 }
 
 .dado {
@@ -143,7 +125,7 @@ body {
 }
 
 #ficha2 {
-    background-color: orange;
+    background-color: #ff6600;
 }
 
 #controles {

@@ -4,15 +4,15 @@ import java.io.*;
 
 public class Tablero extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
-        res.setContentType("text/html");
+        res.setContentType("text/html; charset=UTF-8");
+        res.setCharacterEncoding("UTF-8");
+
         PrintWriter out = res.getWriter();
 
         // Obtener el número del dado desde la URL
         String resultado = req.getParameter("numero");
         if (resultado == null) {
             resultado = "Lanzar dado";
-        } else {
-            resultado = "🎲 " + resultado;
         }
 
         out.println("<!DOCTYPE html>");
@@ -25,26 +25,120 @@ public class Tablero extends HttpServlet {
         out.println("<style>");
         out.println("table { border-collapse: collapse; width: 400px; height: 400px; }");
         out.println("td { width: 50px; height: 40px; border: 2px solid black; text-align: center; font-size: 25px; }");
+        out.println("#dado-container {");
+        out.println("  position: absolute;");
+        out.println("  top: 250px;");
+        out.println("  left: 50%;");
+        out.println("  transform: translateX(-50%);");
+        out.println("  text-align: center;");
+        out.println("}");
         out.println("</style>");
         out.println("</head>");
         out.println("<body>");
 
         out.println("<div style='position: relative; display: inline-block;'>");
         out.println("<table>");
-        out.println("<tr><td class='verde'>▲</td><td class='rosa'></td><td class='blanco'>🎲</td><td class='rojo'></td><td class='verde'></td><td class='rosa'></td><td class='blanco'>🎲</td><td class='rojo'></td><td class='azul'>▲</td></tr>");
-        out.println("<tr><td class='azul'></td><td class='negro'></td><td class='negro'></td><td class='negro'></td><td class='azul'></td><td class='negro'></td><td class='negro'></td><td class='negro'></td><td class='verde'></td></tr>");
-        out.println("<tr><td class='blanco'>🎲</td><td class='negro'></td><td class='negro'></td><td class='negro'></td><td class='blanco'>🎲</td><td class='negro'></td><td class='negro'></td><td class='negro'></td><td class='blanco'>🎲</td></tr>");
-        out.println("<tr><td class='rojo'></td><td class='negro'></td><td class='negro'></td><td class='negro'></td><td class='rojo'></td><td class='negro'></td><td class='negro'></td><td class='negro'></td><td class='rosa'></td></tr>");
-        out.println("<tr><td class='rosa'></td><td class='verde'></td><td class='blanco'>🎲</td><td class='azul'></td><td class='gris'>★</td><td class='rosa'></td><td class='blanco'>🎲</td><td class='rojo'></td><td class='azul'></td></tr>");
-        out.println("<tr><td class='azul'></td><td class='negro'></td><td class='negro'></td><td class='negro'></td><td class='verde'></td><td class='negro'></td><td class='negro'></td><td class='negro'></td><td class='verde'></td></tr>");
-        out.println("<tr><td class='blanco'>🎲</td><td class='negro'></td><td class='negro'></td><td class='negro'></td><td class='blanco'>🎲</td><td class='negro'></td><td class='negro'></td><td class='negro'></td><td class='blanco'>🎲</td></tr>");
-        out.println("<tr><td class='rojo'></td><td class='negro'></td><td class='negro'></td><td class='negro'></td><td class='rosa'></td><td class='negro'></td><td class='negro'></td><td class='negro'></td><td class='rosa'></td></tr>");
-        out.println("<tr><td class='rosa'>▲</td><td class='verde'></td><td class='blanco'>🎲</td><td class='azul'></td><td class='rojo'></td><td class='verde'></td><td class='blanco'>🎲</td><td class='azul'></td><td class='rojo'>▲</td></tr>");
-        out.println("</table>");
-        out.println("<div id='ficha' class='ficha'>1</div>");
-        out.println("</div>");
+        out.println("<tr>\r\n" + //
+                        "            <td class=\"verde\"><div id=\"ficha\" class=\"ficha\">1</div>▲</td>\r\n" + //
+                        "            <td class=\"amarillo\"></td>\r\n" + //
+                        "            <td class=\"blanco\">🎲</td>\r\n" + //
+                        "            <td class=\"azul\"></td>\r\n" + //
+                        "            <td class=\"verde\"></td>\r\n" + //
+                        "            <td class=\"rojo\"></td>\r\n" + //
+                        "            <td class=\"blanco\">🎲</td>\r\n" + //
+                        "            <td class=\"amarillo\"></td>\r\n" + //
+                        "            <td class=\"azul\"><div id=\"ficha2\" class=\"ficha\">2</div>▲</td>\r\n" + //
+                        "        </tr>");
+        out.println("<tr>\r\n" + //
+                        "            <td class=\"rojo\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"verde\"></td>\r\n" + //
+                        "        </tr>");
+        out.println("<tr>\r\n" + //
+                        "            <td class=\"blanco\">🎲</td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"blanco\">🎲</td>\r\n" + //
+                        "        </tr>");
+        out.println("<tr>\r\n" + //
+                        "            <td class=\"verde\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"rojo\"></td>\r\n" + //
+                        "        </tr>");
+        out.println("<tr>\r\n" + //
+                        "            <td class=\"amarillo\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"azul\"></td>\r\n" + //
+                        "        </tr>");
+        out.println("<tr>\r\n" + //
+                        "            <td class=\"rojo\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"verde\"></td>\r\n" + //
+                        "        </tr>");
+        out.println("<tr>\r\n" + //
+                        "            <td class=\"blanco\">🎲</td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"blanco\">🎲</td>\r\n" + //
+                        "        </tr>");
+        out.println("<tr>\r\n" + //
+                        "            <td class=\"azul\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"negro\"></td>\r\n" + //
+                        "            <td class=\"amarillo\"></td>\r\n" + //
+                        "        </tr>");
+        out.println("<tr>\r\n" + //
+                        "            <td class=\"amarillo\">▲</td>\r\n" + //
+                        "            <td class=\"rojo\"></td>\r\n" + //
+                        "            <td class=\"blanco\">🎲</td>\r\n" + //
+                        "            <td class=\"azul\"></td>\r\n" + //
+                        "            <td class=\"amarillo\"></td>\r\n" + //
+                        "            <td class=\"verde\"></td>\r\n" + //
+                        "            <td class=\"blanco\">🎲</td>\r\n" + //
+                        "            <td class=\"azul\"></td>\r\n" + //
+                        "            <td class=\"rojo\">▲</td>\r\n" + //
+                        "        </tr>");
 
-        out.println("<br><br>");
+        out.println("<br>");
         out.println("<div id='dado-container'>");
         out.println("<form action='Dado' method='GET'>");
         out.println("<button type='submit'>🎲</button>");
