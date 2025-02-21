@@ -2,7 +2,7 @@ import javax.servlet.http.*;
 import java.sql.*;
 import java.io.*;
 
-public class validarRespuesta extends HttpServlet {
+public class ValidarRespuesta extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse res) {
         Connection con;
         Statement st;

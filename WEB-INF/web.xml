@@ -80,12 +80,12 @@
         </servlet-mapping>
         
         <servlet>
-            <servlet-name>enJuego</servlet-name>
-            <servlet-class>enJuego</servlet-class>
+            <servlet-name>EnJuego</servlet-name>
+            <servlet-class>EnJuego</servlet-class>
         </servlet>
         <servlet-mapping>
-            <servlet-name>enJuego</servlet-name>
-            <url-pattern>/enJuego</url-pattern>
+            <servlet-name>EnJuego</servlet-name>
+            <url-pattern>/EnJuego</url-pattern>
         </servlet-mapping>
 
         <servlet>
@@ -107,12 +107,12 @@
         </servlet-mapping>
 
         <servlet>
-            <servlet-name>unirsePartida</servlet-name>
-            <servlet-class>unirsePartida</servlet-class>
+            <servlet-name>UnirsePartida</servlet-name>
+            <servlet-class>UnirsePartida</servlet-class>
         </servlet>
         <servlet-mapping>
-            <servlet-name>unirsePartida</servlet-name>
-            <url-pattern>/unirsePartida</url-pattern>
+            <servlet-name>UnirsePartida</servlet-name>
+            <url-pattern>/UnirsePartida</url-pattern>
         </servlet-mapping>
 
         <servlet>
