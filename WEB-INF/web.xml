@@ -115,6 +115,15 @@
             <url-pattern>/unirsePartida</url-pattern>
         </servlet-mapping>
 
+        <servlet>
+            <servlet-name>Tablero</servlet-name>
+            <servlet-class>Tablero</servlet-class>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>Tablero</servlet-name>
+            <url-pattern>/tablero</url-pattern>
+        </servlet-mapping>
+
         <session-config>
             <session-timeout>30</session-timeout>
         </session-config>
