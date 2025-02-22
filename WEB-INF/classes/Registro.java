@@ -31,7 +31,7 @@ public class Registro extends HttpServlet {
                     out.println("El nombre de usuario ya existe. Por favor, elige otro nombre.");
                 } else {
                     // Registrar nuevo usuario
-                    PreparedStatement stmt = con.prepareStatement("INSERT INTO jugadores (nombre, password) VALUES (?, ?)");
+                    PreparedStatement stmt = con.prepareStatement("INSERT INTO jugadores (nombre, password) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
                     stmt.setString(1, nombre);
                     stmt.setString(2, pass);
                     stmt.executeUpdate();
