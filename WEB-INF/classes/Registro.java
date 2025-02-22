@@ -35,7 +35,11 @@ public class Registro extends HttpServlet {
                     stmt.setString(1, nombre);
                     stmt.setString(2, pass);
                     stmt.executeUpdate();
-                    out.println("Registro exitoso");
+
+                    HttpSession session = req.getSession(); // crea una sesión
+                    session.setAttribute("nombre", nombre); // guarda el nombre del usuario en la sesión
+                    session.setAttribute("IdJugador", stmt.getGeneratedKeys().getInt(1)); // guarda el id del usuario en la sesión
+                    session.setMaxInactiveInterval(30 * 60); // La sesión dura 30 minutos    
 
                     res.sendRedirect("inicioPartida.html");
 

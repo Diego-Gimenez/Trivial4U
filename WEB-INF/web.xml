@@ -43,6 +43,7 @@
             <url-pattern>/Estadisticas</url-pattern>
         </servlet-mapping>
 
+        <!-- Servlet para crear una partida -->
         <servlet>
             <servlet-name>CrearPartida</servlet-name>
             <servlet-class>CrearPartida</servlet-class>
@@ -52,7 +53,8 @@
             <url-pattern>/CrearPartida</url-pattern>
         </servlet-mapping>
 
-         <servlet>
+        <!-- Servlet para cerrar sesión -->
+        <servlet>
             <servlet-name>Logout</servlet-name>
             <servlet-class>Logout</servlet-class>
         </servlet>
