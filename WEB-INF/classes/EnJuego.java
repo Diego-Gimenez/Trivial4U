@@ -15,6 +15,7 @@ public class EnJuego extends HttpServlet {
 
         if (idUsuario == -1) {
             out.println("<html><body><h1>Error: No has iniciado sesión.</h1></body></html>");
+            res.sendRedirect("login.html");
             return;
         }
 
@@ -51,7 +52,7 @@ public class EnJuego extends HttpServlet {
                 out.println("<td>" + nombrePartida + "</td>");
                 out.println("<td>" + nombreCreador + "</td>");
                 out.println("<td>" + nombreContrincante + "</td>");
-                out.println("<td><form action='tablero' method='get'>");
+                out.println("<td><form action='Tablero' method='get'>");
                 out.println("<input type='hidden' name='partida' value='" + idPartida + "'>");
                 out.println("<input type='submit' value='Continuar'>");
                 out.println("</form></td>");
