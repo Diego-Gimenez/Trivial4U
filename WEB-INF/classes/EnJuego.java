@@ -26,14 +26,17 @@ public class EnJuego extends HttpServlet {
 
             // Consulta para obtener partidas activas donde el usuario es creador o contrincante
             String sql = "SELECT p.IdPartida, p.nombrePartida, c.nombre AS nombreCreador, " +
-                         "COALESCE(o.nombre, 'Esperando') AS nombreContrincante " +
-                         "FROM partida p " +
-                         "JOIN jugadores c ON p.idCreador = c.IdJugador " +
-                         "LEFT JOIN jugadores o ON p.contrincante = o.IdJugador " +
-                         "WHERE p.activa = 1 AND (p.idCreador = ? OR p.contrincante = ?)";
+            "COALESCE(o.nombre, 'Esperando') AS nombreContrincante " +
+            "FROM partida p " +
+            "JOIN jugadores c ON p.idCreador = c.IdJugador " +
+            "LEFT JOIN jugadores o ON p.contrincante = o.IdJugador " +
+            "JOIN detallespartida d ON p.IdPartida = d.IdPartida " +  // JOIN con detallespartida
+            "WHERE p.activa = 1 " +
+            "AND d.IdJugador = ? " +  // Solo partidas donde participa el usuario
+            "AND d.Turno = 1";        // Filtra por partidas donde es su turno
+
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, idUsuario);
-            ps.setInt(2, idUsuario);
+            ps.setInt(1, idUsuario);  // Se usa una sola vez, ya que ahora el filtro es por detallespartida
             ResultSet rs = ps.executeQuery();
 
             // Generar la respuesta HTML
