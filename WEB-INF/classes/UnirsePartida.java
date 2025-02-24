@@ -59,7 +59,7 @@ public class UnirsePartida extends HttpServlet {
 
         // Obtener el ID del usuario desde la sesión
         HttpSession session = req.getSession();
-        int idUsuario = (session.getAttribute("idUsuario") != null) ? (int) session.getAttribute("idUsuario") : -1;
+        int idUsuario = (session.getAttribute("IdJugador") != null) ? (int) session.getAttribute("IdJugador") : -1;
 
         // Obtener el ID de la partida
         int idPartida = Integer.parseInt(req.getParameter("idPartida"));
@@ -86,7 +86,7 @@ public class UnirsePartida extends HttpServlet {
                 out.println("<html><head><title>Tablero de Juego</title></head><body>");
                 out.println("<h1>Bienvenido al Tablero de la Partida " + idPartida + "</h1>");
                 out.println("<p>Has sido unido correctamente a la partida. ¡Buena suerte!</p>");
-                out.println("<a href='tablero?partida=" + idPartida + "'>Ir al Tablero</a>");
+                out.println("<a href='Tablero?partida=" + idPartida + "'>Ir al Tablero</a>");
                 out.println("</body></html>");
             } else {
                 res.getWriter().println("Error al unirse a la partida.");

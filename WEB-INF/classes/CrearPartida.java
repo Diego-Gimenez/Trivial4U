@@ -49,7 +49,7 @@ public class CrearPartida extends HttpServlet {
                 rs.close();
                 // Mostrar un mensaje con el idPartida o redirigir a la página de inicio de partida
                 out.println("<h2>Partida con ID " + idPartidaGenerada + " creada exitosamente.</h2>");
-                res.sendRedirect("tablero.html");  // Redirigir a la página principal de la partida
+                res.sendRedirect("Tablero?idPartida=" + idPartidaGenerada);  // Redirigir a la página principal de la partida
             } else {
                 out.println("<h2>Hubo un error al crear la partida. Intenta de nuevo.</h2>");
             }

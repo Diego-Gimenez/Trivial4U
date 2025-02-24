@@ -45,7 +45,7 @@ public class MoverFicha extends HttpServlet {
             out.println("<p>Posición actual: " + posicionActual + "</p>");
             out.println("<p>Nueva Posición 1: " + nuevaPosicion1 + "</p>");
             out.println("<p>Nueva Posición 2: " + nuevaPosicion2 + "</p>");
-            res.sendRedirect("tablero?numero=" + resultado + "&pos1=" + nuevaPosicion1 + "&pos2=" + nuevaPosicion2);
+            res.sendRedirect("Tablero?numero=" + resultado + "&pos1=" + nuevaPosicion1 + "&pos2=" + nuevaPosicion2);
             return;
         }
 
