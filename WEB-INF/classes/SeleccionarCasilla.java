@@ -27,6 +27,6 @@ public class SeleccionarCasilla extends HttpServlet {
             System.err.println(e);
         }
 
-        res.sendRedirect("tablero?numCasilla=" + nuevaPosicion);
+        res.sendRedirect("Tablero?numCasilla=" + nuevaPosicion);
     }
 }
