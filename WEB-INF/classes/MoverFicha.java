@@ -7,9 +7,13 @@ public class MoverFicha extends HttpServlet {
         Connection con;
         Statement st;
         ResultSet rs;
-        PrintWriter out;
+        PrintWriter out = res.getWriter();
         String SQL;
         String resultado = req.getParameter("numero");
+        if (resultado == null || resultado.isEmpty()) {
+            out.println("<h1>Error: Parámetro 'numero' no recibido</h1>");
+            return;
+        }
         int resultadoDado = Integer.parseInt(resultado);
         int posicionActual = 1;
         int nuevaPosicion1 = 0;
@@ -23,7 +27,6 @@ public class MoverFicha extends HttpServlet {
             rs = st.executeQuery(SQL);
             out = res.getWriter();
             res.setContentType("text/html");
-            out.println("<h1>Debug: MoverFicha funcionando</h1>");
 
             if (rs.next()) {
                 posicionActual = rs.getInt("NumCasilla");
@@ -38,6 +41,7 @@ public class MoverFicha extends HttpServlet {
             if (nuevaPosicion2 < 1) {
                 nuevaPosicion2 = nuevaPosicion2 + 32;
             }
+            out.println("<h1>Debug: MoverFicha funcionando</h1>");
             out.println("<p>Posición actual: " + posicionActual + "</p>");
             out.println("<p>Nueva Posición 1: " + nuevaPosicion1 + "</p>");
             out.println("<p>Nueva Posición 2: " + nuevaPosicion2 + "</p>");
@@ -45,9 +49,11 @@ public class MoverFicha extends HttpServlet {
             return;
         }
 
-        catch (Exception e) {
+        catch (NumberFormatException e) {
+            out.println("<h1>Error: Número inválido</h1>");
+        } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("<p>Error en el servidor: " + e.getMessage() + "</p>");
-        }
+            out.println("<h1>Error en el servidor: " + e.getMessage() + "</h1>");
+        } 
     }
 }

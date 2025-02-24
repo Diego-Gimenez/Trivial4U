@@ -5,13 +5,15 @@ import java.sql.*;
 public class Tablero extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
         Connection con;
-        Statement st, st2;
-        ResultSet rs, rs2;
+        Statement st, st2, st3;
+        ResultSet rs, rs2, rs3;
+        rs3 = null;
         PrintWriter out;
-        String SQL, SQL2;
+        String SQL, SQL2, SQL3;
         String resultado = req.getParameter("numero");
         String nuevaPosicion1 = req.getParameter("pos1");
         String nuevaPosicion2 = req.getParameter("pos2");
+        String IdPregunta = req.getParameter("idpregunta");
         int pos1 = -1;
         int pos2 = -1;
 
@@ -47,6 +49,14 @@ public class Tablero extends HttpServlet {
                 posicion = rs2.getInt("NumCasilla");
             }
 
+            if (IdPregunta != "0") {
+                st3 = con.createStatement();
+                SQL3 = "SELECT * FROM preguntas WHERE IdPregunta =" + IdPregunta;
+                rs3 = st3.executeQuery(SQL3);
+            } else {
+                out.println("Volver a tirar");
+            }
+
             while (rs.next()) {
                 int id = rs.getInt("NumeroCasilla");
                 int fila = rs.getInt("Fila");
@@ -73,7 +83,7 @@ public class Tablero extends HttpServlet {
                 if (id == posicion) {
                     contenido += "<div id='ficha' class='ficha'>1</div>";
                 }
-                    // ✔
+                
                 if (id == pos1 || id == pos2) {
                     contenido = "<form action='SeleccionarCasilla' method='POST'>" +
                                 "<input type='hidden' name='casilla' value='" + id + "'>" +
@@ -120,6 +130,27 @@ public class Tablero extends HttpServlet {
                 out.println("</tr>");
             }
             out.println("</tr></table>");
+
+            if (rs3 != null && rs3.next()) {
+                String pregunta = rs3.getString("Texto");
+                String res1 = rs3.getString("Respuesta1");
+                String res2 = rs3.getString("Respuesta2");
+                String res3 = rs3.getString("Respuesta3");
+                String res4 = rs3.getString("Respuesta4");
+
+                out.println("<h2>" + pregunta + "</h2>");
+                out.println("<form action='ValidarRespuesta' method='GET'>");
+                out.println("<input type='radio' name='respuesta' value='" + res1 + "' required> " + res1 + "<br>");
+                out.println("<input type='radio' name='respuesta' value='" + res2 + "'> " + res2 + "<br>");
+                out.println("<input type='radio' name='respuesta' value='" + res3 + "'> " + res3 + "<br>");
+                out.println("<input type='radio' name='respuesta' value='" + res4 + "'> " + res4 + "<br>");
+                out.println("<input type='submit' value='Responder'>");
+                out.println("</form>");
+
+            } else {
+            out.println("No hay preguntas disponibles en esta categoría.");
+            }
+
             out.println("<br>");
             out.println("<div id='dado-container'>");
             out.println("<form action='Dado' method='GET'>");
