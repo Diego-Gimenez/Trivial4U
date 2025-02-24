@@ -126,6 +126,15 @@
             <url-pattern>/tablero</url-pattern>
         </servlet-mapping>
 
+        <servlet>
+            <servlet-name>SeleccionarCasilla</servlet-name>
+            <servlet-class>SeleccionarCasilla</servlet-class>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>SeleccionarCasilla</servlet-name>
+            <url-pattern>/SeleccionarCasilla</url-pattern>
+        </servlet-mapping>
+
         <session-config>
             <session-timeout>30</session-timeout>
         </session-config>

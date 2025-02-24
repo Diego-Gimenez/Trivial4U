@@ -5,10 +5,24 @@ import java.sql.*;
 public class Tablero extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
         Connection con;
-        Statement st;
-        ResultSet rs;
+        Statement st, st2;
+        ResultSet rs, rs2;
         PrintWriter out;
-        String SQL;
+        String SQL, SQL2;
+        String resultado = req.getParameter("numero");
+        String nuevaPosicion1 = req.getParameter("pos1");
+        String nuevaPosicion2 = req.getParameter("pos2");
+        int pos1 = -1;
+        int pos2 = -1;
+
+        if (nuevaPosicion1 != null && !nuevaPosicion1.isEmpty()) {
+            pos1 = Integer.parseInt(nuevaPosicion1);
+        }
+
+        if (nuevaPosicion2 != null && !nuevaPosicion2.isEmpty()) {
+            pos2 = Integer.parseInt(nuevaPosicion2);
+        }
+
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -16,21 +30,30 @@ public class Tablero extends HttpServlet {
             st = con.createStatement();
             SQL = "SELECT * FROM tablero ORDER BY Fila, Columna";
             rs = st.executeQuery(SQL);
+            st2 = con.createStatement();
+            SQL2 = "SELECT NumCasilla FROM detallespartida";
+            rs2 = st2.executeQuery(SQL2);
             out = res.getWriter();
             res.setContentType("text/html; charset=UTF-8");
             res.setCharacterEncoding("UTF-8");
             String[][] tablero = new String[10][10];
             
-            String resultado = req.getParameter("numero");
             if (resultado == null) {
                 resultado = "Lanzar dado";
             }
 
+            int posicion = -1;
+            if (rs2.next()) {
+                posicion = rs2.getInt("NumCasilla");
+            }
+
             while (rs.next()) {
+                int id = rs.getInt("NumeroCasilla");
                 int fila = rs.getInt("Fila");
                 int columna = rs.getInt("Columna");
                 String tipo = rs.getString("IdTipo");
                 String categoria = rs.getString("IdCategoria");
+
                 if (tipo.equals("3")) {
                     tipo = "blanco";
                 } else {
@@ -46,6 +69,18 @@ public class Tablero extends HttpServlet {
                 if (contenido == null) contenido = ""; 
                 contenido = contenido.replace("🎲", "&#127922;");
                 contenido = contenido.replace("▲", "&#9650;");
+
+                if (id == posicion) {
+                    contenido += "<div id='ficha' class='ficha'>1</div>";
+                }
+                    // ✔
+                if (id == pos1 || id == pos2) {
+                    contenido = "<form action='SeleccionarCasilla' method='POST'>" +
+                                "<input type='hidden' name='casilla' value='" + id + "'>" +
+                                "<button type='submit' class='seleccionar-casilla'>&#10004;</button>" +
+                                "</form>";
+                    tipo += " resaltado";
+                }
                 tablero[fila][columna] = "<td class='" + tipo + "'>" + contenido + "</td>";
             }
 
@@ -75,11 +110,10 @@ public class Tablero extends HttpServlet {
             for (int fila = 1; fila < 10; fila++) {
                 out.println("<tr>");
                 for (int columna = 1; columna < 10; columna++) {
-                    // Si la celda está en la zona negra (centro 7x7)
+                    // Celda negra
                     if (fila >= 2 && fila <= 8 && columna >= 2 && columna <= 8) {
                         out.println("<td class='negro'></td>");
                     } else {
-                        // Si hay contenido en la base de datos, se muestra; de lo contrario, celda vacía
                         out.println(tablero[fila][columna] != null ? tablero[fila][columna] : "<td></td>");
                     }
                 }
@@ -89,7 +123,7 @@ public class Tablero extends HttpServlet {
             out.println("<br>");
             out.println("<div id='dado-container'>");
             out.println("<form action='Dado' method='GET'>");
-            out.println("<button type='submit'>🎲</button>");
+            out.println("<button type='submit'>&#127922;</button>");
             out.println("</form>");
             out.println("<div id='resultadoDado1'><strong>" + resultado + "</strong></div>");
             out.println("</div>");
