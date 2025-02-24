@@ -15,6 +15,7 @@ public class EnJuego extends HttpServlet {
 
         if (idUsuario == -1) {
             out.println("<html><body><h1>Error: No has iniciado sesión.</h1></body></html>");
+            res.sendRedirect("login.html");
             return;
         }
 
@@ -25,14 +26,17 @@ public class EnJuego extends HttpServlet {
 
             // Consulta para obtener partidas activas donde el usuario es creador o contrincante
             String sql = "SELECT p.IdPartida, p.nombrePartida, c.nombre AS nombreCreador, " +
-                         "COALESCE(o.nombre, 'Esperando') AS nombreContrincante " +
-                         "FROM partida p " +
-                         "JOIN jugadores c ON p.idCreador = c.IdJugador " +
-                         "LEFT JOIN jugadores o ON p.contrincante = o.IdJugador " +
-                         "WHERE p.activa = 1 AND (p.idCreador = ? OR p.contrincante = ?)";
+            "COALESCE(o.nombre, 'Esperando') AS nombreContrincante " +
+            "FROM partida p " +
+            "JOIN jugadores c ON p.idCreador = c.IdJugador " +
+            "LEFT JOIN jugadores o ON p.contrincante = o.IdJugador " +
+            "JOIN detallespartida d ON p.IdPartida = d.IdPartida " +  // JOIN con detallespartida
+            "WHERE p.activa = 1 " +
+            "AND d.IdJugador = ? " +  // Solo partidas donde participa el usuario
+            "AND d.Turno = 1";        // Filtra por partidas donde es su turno
+
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, idUsuario);
-            ps.setInt(2, idUsuario);
+            ps.setInt(1, idUsuario);  // Se usa una sola vez, ya que ahora el filtro es por detallespartida
             ResultSet rs = ps.executeQuery();
 
             // Generar la respuesta HTML
@@ -51,7 +55,7 @@ public class EnJuego extends HttpServlet {
                 out.println("<td>" + nombrePartida + "</td>");
                 out.println("<td>" + nombreCreador + "</td>");
                 out.println("<td>" + nombreContrincante + "</td>");
-                out.println("<td><form action='tablero' method='get'>");
+                out.println("<td><form action='Tablero' method='get'>");
                 out.println("<input type='hidden' name='partida' value='" + idPartida + "'>");
                 out.println("<input type='submit' value='Continuar'>");
                 out.println("</form></td>");
