@@ -17,6 +17,8 @@ public class Tablero extends HttpServlet {
         String idPartida = req.getParameter("IdPartida");  // Obtener IdPartida de la URL
         int pos1 = -1;
         int pos2 = -1;
+        
+        System.out.println("IdPartida en Tablero antes de renderizar el formulario: " + idPartida);
 
         if (nuevaPosicion1 != null && !nuevaPosicion1.isEmpty()) {
             pos1 = Integer.parseInt(nuevaPosicion1);
