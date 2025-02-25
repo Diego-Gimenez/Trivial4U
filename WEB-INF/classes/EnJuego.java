@@ -56,7 +56,7 @@ public class EnJuego extends HttpServlet {
                 out.println("<td>" + nombreCreador + "</td>");
                 out.println("<td>" + nombreContrincante + "</td>");
                 out.println("<td><form action='Tablero' method='get'>");
-                out.println("<input type='hidden' name='partida' value='" + idPartida + "'>");
+                out.println("<input type='hidden' name='IdPartida' value='" + idPartida + "'>");
                 out.println("<input type='submit' value='Continuar'>");
                 out.println("</form></td>");
                 out.println("</tr>");
