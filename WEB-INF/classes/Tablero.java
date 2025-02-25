@@ -14,6 +14,7 @@ public class Tablero extends HttpServlet {
         String nuevaPosicion1 = req.getParameter("pos1");
         String nuevaPosicion2 = req.getParameter("pos2");
         String IdPregunta = req.getParameter("idpregunta");
+        String idPartida = req.getParameter("IdPartida");  // Obtener IdPartida de la URL
         int pos1 = -1;
         int pos2 = -1;
 
@@ -27,13 +28,22 @@ public class Tablero extends HttpServlet {
 
 
         try {
+
+            HttpSession session = req.getSession();
+            Integer idJugador = (Integer) session.getAttribute("IdJugador");
+
+            if (idJugador == null) {
+                res.sendRedirect("login.html"); // Si no hay sesión, redirige al login
+                return;
+            }
+
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyecto?useUnicode=true&characterEncoding=UTF-8", "root", "");
             st = con.createStatement();
             SQL = "SELECT * FROM tablero ORDER BY Fila, Columna";
             rs = st.executeQuery(SQL);
             st2 = con.createStatement();
-            SQL2 = "SELECT NumCasilla FROM detallespartida";
+            SQL2 = "SELECT NumCasilla FROM detallespartida WHERE IdPartida = " + idPartida + " AND IdJugador = " + idJugador;
             rs2 = st2.executeQuery(SQL2);
             out = res.getWriter();
             res.setContentType("text/html; charset=UTF-8");

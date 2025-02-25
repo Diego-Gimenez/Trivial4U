@@ -9,12 +9,12 @@ public class SeleccionarCasilla extends HttpServlet {
         ResultSet rsTablero = null, rsPregunta = null;
         int nuevaPosicion = 0;
         String idPregunta = "0";
-
+        //int IdPartida = 0;
         try {
             // Obtener la sesión y el IdJugador
             HttpSession session = req.getSession();
             Integer idJugador = (Integer) session.getAttribute("IdJugador");
-
+            
             if (idJugador == null) {
                 res.sendRedirect("login.html"); // Si no hay sesión, redirige al login
                 return;
@@ -22,6 +22,8 @@ public class SeleccionarCasilla extends HttpServlet {
 
             // Obtener la nueva casilla desde el formulario
             String nuevaCasilla = req.getParameter("casilla");
+            //String idPartida = req.getParameter("IdPartida");
+            //IdPartida = Integer.parseInt(idPartida);
             if (nuevaCasilla != null) {
                 nuevaPosicion = Integer.parseInt(nuevaCasilla);
 
@@ -32,9 +34,10 @@ public class SeleccionarCasilla extends HttpServlet {
                 // Actualizar la casilla del jugador en detallespartida
                 String sqlUpdate = "UPDATE detallespartida SET NumCasilla = ? WHERE IdJugador = ?";
                 psUpdate = con.prepareStatement(sqlUpdate);
-                psUpdate.setInt(1, nuevaPosicion);
-                psUpdate.setInt(2, idJugador);
+                psUpdate.setInt(1, nuevaPosicion);  // Establece la nueva posición de la casilla
+                psUpdate.setInt(2, idJugador);      // Establece el id del jugador
                 psUpdate.executeUpdate();
+
 
                 // Obtener la categoría de la casilla
                 String sqlTablero = "SELECT IdCategoria FROM tablero WHERE NumeroCasilla = ?";
