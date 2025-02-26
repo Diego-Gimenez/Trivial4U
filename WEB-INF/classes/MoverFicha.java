@@ -79,7 +79,7 @@ public class MoverFicha extends HttpServlet {
                 if (nuevaPosicion2J1 < 1) {
                     nuevaPosicion2J1 = nuevaPosicion2J1 + 32;
                 }
-                res.sendRedirect("tablero?numero=" + resultado + "&pos1=" + nuevaPosicion1J1 + "&pos2=" + nuevaPosicion2J1);
+                res.sendRedirect("tablero?numero=" + resultado + "&pos1=" + nuevaPosicion1J1 + "&pos2=" + nuevaPosicion2J1 + "&IdPartida=" + idPartida);
                 return;
 
             } else if (turnoJ2 == 1) {
@@ -94,7 +94,7 @@ public class MoverFicha extends HttpServlet {
                 if (nuevaPosicion2J2 < 1) {
                     nuevaPosicion2J2 = nuevaPosicion2J2 + 32;
                 } 
-                res.sendRedirect("tablero?numero=" + resultado + "&pos1=" + nuevaPosicion1J2 + "&pos2=" + nuevaPosicion2J2);
+                res.sendRedirect("tablero?numero=" + resultado + "&pos1=" + nuevaPosicion1J2 + "&pos2=" + nuevaPosicion2J2 + "&IdPartida=" + idPartida);
                 return;
             }
 

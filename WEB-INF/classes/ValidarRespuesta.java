@@ -11,6 +11,12 @@ public class ValidarRespuesta extends HttpServlet {
         String SQL;
         String pregunta = req.getParameter("IdPregunta");
         String respuesta = req.getParameter("respuesta");
+        String IdPartida = req.getParameter("IdPartida");
+        int idPartida = -1;
+
+        if (IdPartida != null && !IdPartida.isEmpty()) {
+            idPartida = Integer.parseInt(IdPartida);
+        }
 
         if (pregunta == null || respuesta == null) {
             res.setContentType("text/html");
@@ -68,9 +74,10 @@ public class ValidarRespuesta extends HttpServlet {
                     out.println("<h2>Error</h2>");
                     out.println("<p>No se encontró la pregunta en la base de datos.</p>");
                 }
+
                 System.out.println("Valor de acierto antes de enviar a tablero: " + acierto);
-                System.out.println("Redirigiendo a: tablero?acierto=" + acierto);
-                out.println("<a href='tablero?acierto=" + acierto + "'>Volver al juego</a>");
+                System.out.println("Redirigiendo a: tablero?acierto=" + acierto + "&IdPartida=" + idPartida);
+                out.println("<a href='tablero?acierto=" + acierto +  "&IdPartida=" + idPartida +"'>Volver al juego</a>");
                 out.println("</BODY><HTML>");
                 
                 rs.close();

@@ -188,6 +188,7 @@ public class Tablero extends HttpServlet {
                 out.println("<h2>" + pregunta + "</h2>");
                 out.println("<form action='ValidarRespuesta' method='GET'>");
                 out.println("<input type='hidden' name='IdPregunta' value='" + idPregunta + "'>");
+                out.println("<input type='hidden' name='IdPartida' value='" + idPartida + "'>");
                 out.println("<input type='radio' name='respuesta' value='" + "1" + "' required> " + res1 + "<br>");
                 out.println("<input type='radio' name='respuesta' value='" + "2" + "'> " + res2 + "<br>");
                 out.println("<input type='radio' name='respuesta' value='" + "3" + "'> " + res3 + "<br>");
@@ -199,6 +200,7 @@ public class Tablero extends HttpServlet {
             out.println("<br>");
             out.println("<div id='dado-container'>");
             out.println("<form action='Dado' method='GET'>");
+            out.println("<input type='hidden' name='IdPartida' value='" + idPartida + "'>");
             out.println("<button type='submit'>&#127922;</button>");
             out.println("</form>");
             out.println("<div id='resultadoDado1'><strong>" + resultado + "</strong></div>");
