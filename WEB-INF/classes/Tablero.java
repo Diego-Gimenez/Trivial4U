@@ -15,9 +15,11 @@ public class Tablero extends HttpServlet {
         String nuevaPosicion2 = req.getParameter("pos2");
         String IdPregunta = req.getParameter("idpregunta");
         String aciertoPregunta = req.getParameter("acierto");
+        String IdPartida = req.getParameter("IdPartida");
         int pos1 = -1;
         int pos2 = -1;
         int acierto = -1;
+        int idPartida = -1;
 
         if (nuevaPosicion1 != null && !nuevaPosicion1.isEmpty()) {
             pos1 = Integer.parseInt(nuevaPosicion1);
@@ -26,6 +28,11 @@ public class Tablero extends HttpServlet {
         if (nuevaPosicion2 != null && !nuevaPosicion2.isEmpty()) {
             pos2 = Integer.parseInt(nuevaPosicion2);
         }
+
+        if (IdPartida != null && !IdPartida.isEmpty()) {
+            idPartida = Integer.parseInt(IdPartida);
+        }
+
         // test
         if (aciertoPregunta != null && !aciertoPregunta.isEmpty()) {
             // acierto = Integer.parseInt(aciertoPregunta);
@@ -46,11 +53,11 @@ public class Tablero extends HttpServlet {
             rs = st.executeQuery(SQL);
 
             stJ1 = con.createStatement();
-            SQLJ1 = "SELECT NumCasilla FROM detallespartida WHERE IdPartida = 1 AND IdJugador = 1";
+            SQLJ1 = "SELECT NumCasilla FROM detallespartida WHERE IdPartida = " + idPartida + " AND IdJugador = 1";
             rsJ1 = stJ1.executeQuery(SQLJ1);
 
             stJ2 = con.createStatement();
-            SQLJ2 = "SELECT NumCasilla FROM detallespartida WHERE IdPartida = 1 AND IdJugador = 2";
+            SQLJ2 = "SELECT NumCasilla FROM detallespartida WHERE IdPartida = " + idPartida + " AND IdJugador = 2";
             rsJ2 = stJ2.executeQuery(SQLJ2);
 
             out = res.getWriter();
@@ -113,7 +120,7 @@ public class Tablero extends HttpServlet {
                 
                 if (id == pos1 || id == pos2) {
                     st2 = con.createStatement();
-                    SQL2 = "SELECT * FROM detallespartida WHERE Turno = 1";
+                    SQL2 = "SELECT * FROM detallespartida WHERE Turno = 1 AND IdPartida = " + idPartida;
                     rs2 = st2.executeQuery(SQL2);
 
                     int idJugador = -1;
@@ -122,6 +129,7 @@ public class Tablero extends HttpServlet {
                     }
                     System.out.println("Formulario generado con acierto: " + acierto);
                     contenido = "<form action='SeleccionarCasilla' method='POST'>" +
+                                "<input type='hidden' name='idPartida' value='" + idPartida + "'>" +
                                 "<input type='hidden' name='idJugador' value='" + idJugador + "'>" +
                                 "<input type='hidden' name='acierto' value='" + acierto + "'>" +
                                 "<input type='hidden' name='casilla' value='" + id + "'>" +

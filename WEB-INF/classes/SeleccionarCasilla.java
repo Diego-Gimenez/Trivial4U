@@ -10,6 +10,7 @@ public class SeleccionarCasilla extends HttpServlet {
         ResultSet rs2, rs3;
         int nuevaPosicion = 0;
         int IdPregunta = 0;
+        int idPartida = 0;
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -19,6 +20,7 @@ public class SeleccionarCasilla extends HttpServlet {
             String nuevaCasilla = req.getParameter("casilla");
             String idJugador = req.getParameter("idJugador");
             String aciertoPregunta = req.getParameter("acierto");
+            String IdPartida = req.getParameter("idPartida");
             int acierto = -1;
 
             if (aciertoPregunta != null && !aciertoPregunta.isEmpty()) {
@@ -26,10 +28,14 @@ public class SeleccionarCasilla extends HttpServlet {
             }
             System.out.println("Valor de acierto recibido: " + acierto);
 
+            if (IdPartida != null && !IdPartida.isEmpty()) {
+                idPartida = Integer.parseInt(IdPartida);
+            }
+
             if (nuevaCasilla != null && idJugador != null) {
                 nuevaPosicion = Integer.parseInt(nuevaCasilla);
                 
-                SQL = "UPDATE detallespartida SET NumCasilla = " + nuevaPosicion +  " WHERE IdPartida = 1 AND IdJugador = " + idJugador;
+                SQL = "UPDATE detallespartida SET NumCasilla = " + nuevaPosicion +  " WHERE IdPartida = " + idPartida + " AND IdJugador = " + idJugador;
                 st.executeUpdate(SQL);
 
                 st2 = con.createStatement();
@@ -53,11 +59,11 @@ public class SeleccionarCasilla extends HttpServlet {
                 
                 if (IdPregunta != 0 || acierto == 0) {
                     if (idJugador.equals("1")) {
-                        st.executeUpdate("UPDATE detallespartida SET Turno = 0 WHERE IdPartida = 1 AND IdJugador = 1");
-                        st.executeUpdate("UPDATE detallespartida SET Turno = 1 WHERE IdPartida = 1 AND IdJugador = 2");
+                        st.executeUpdate("UPDATE detallespartida SET Turno = 0 WHERE IdPartida = " + idPartida + " AND IdJugador = 1");
+                        st.executeUpdate("UPDATE detallespartida SET Turno = 1 WHERE IdPartida = " + idPartida + " AND IdJugador = 2");
                     } else if (idJugador.equals("2")) {
-                        st.executeUpdate("UPDATE detallespartida SET Turno = 0 WHERE IdPartida = 1 AND IdJugador = 2");
-                        st.executeUpdate("UPDATE detallespartida SET Turno = 1 WHERE IdPartida = 1 AND IdJugador = 1");
+                        st.executeUpdate("UPDATE detallespartida SET Turno = 0 WHERE IdPartida = " + idPartida + " AND IdJugador = 2");
+                        st.executeUpdate("UPDATE detallespartida SET Turno = 1 WHERE IdPartida = " + idPartida + " AND IdJugador = 1");
                     }
                 } 
             }
@@ -67,6 +73,6 @@ public class SeleccionarCasilla extends HttpServlet {
             System.err.println(e);
         }
 
-        res.sendRedirect("tablero?numCasilla=" + nuevaPosicion + "&idpregunta=" + IdPregunta);
+        res.sendRedirect("tablero?numCasilla=" + nuevaPosicion + "&idpregunta=" + IdPregunta + "&IdPartida=" + idPartida);
     }
 }

@@ -10,10 +10,13 @@ public class MoverFicha extends HttpServlet {
         PrintWriter out = res.getWriter();
         String SQLJ1, SQLJ2;
         String resultado = req.getParameter("numero");
+        String IdPartida = req.getParameter("IdPartida");
+
         if (resultado == null || resultado.isEmpty()) {
             out.println("<h1>Error: Parámetro 'numero' no recibido</h1>");
             return;
         }
+
         int resultadoDado = Integer.parseInt(resultado);
         int posicionActualJ1 = 1;
         int nuevaPosicion1J1 = 0;
@@ -22,6 +25,12 @@ public class MoverFicha extends HttpServlet {
         int posicionActualJ2 = 1;
         int nuevaPosicion1J2 = 0;
         int nuevaPosicion2J2 = 0;
+
+        int idPartida = -1;
+        if (IdPartida != null && !IdPartida.isEmpty()) {
+            idPartida = Integer.parseInt(IdPartida);
+        }
+
         /* 
         String aciertoPregunta = req.getParameter("acierto");
         int acierto = -1;
@@ -29,16 +38,17 @@ public class MoverFicha extends HttpServlet {
             acierto = Integer.parseInt(aciertoPregunta);
         }
         */
+
         try {
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyecto", "root", "");
 
             stJ1 = con.createStatement();
-            SQLJ1 = "SELECT * FROM detallespartida WHERE IdPartida = 1 AND IdJugador = 1";
+            SQLJ1 = "SELECT * FROM detallespartida WHERE IdPartida = " + idPartida + " AND IdJugador = 1";
             rsJ1 = stJ1.executeQuery(SQLJ1);
 
             stJ2 = con.createStatement();
-            SQLJ2 = "SELECT * FROM detallespartida WHERE IdPartida = 1 AND IdJugador = 2";
+            SQLJ2 = "SELECT * FROM detallespartida WHERE IdPartida = " + idPartida + " AND IdJugador = 2";
             rsJ2 = stJ2.executeQuery(SQLJ2);
 
             out = res.getWriter();
@@ -89,7 +99,7 @@ public class MoverFicha extends HttpServlet {
             }
 
             out.println("<p>Error con los turnos</p>");
-            res.sendRedirect("tablero?NumCasilla");
+            res.sendRedirect("tablero?NumCasilla&IdPartida=" + idPartida);
             // res.sendRedirect("tablero?NumCasilla&acierto=" + acierto);
             return;
         }
