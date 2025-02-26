@@ -44,11 +44,10 @@ public class ValidarRespuesta extends HttpServlet {
                 SQL = "SELECT * FROM preguntas WHERE IdPregunta =" + pregunta;
                 rs = st.executeQuery(SQL);
                 out = res.getWriter();
-                res.setContentType("text/html");
 
-                out.println("<HTML><BODY>");
                 if (rs.next()) {
                     int correcta = rs.getInt("Correcta");
+                    /* 
                     String textoCorrecta = "";
                     switch (correcta) {
                         case 1: textoCorrecta = rs.getString("Respuesta1"); break;
@@ -56,38 +55,25 @@ public class ValidarRespuesta extends HttpServlet {
                         case 3: textoCorrecta = rs.getString("Respuesta3"); break;
                         case 4: textoCorrecta = rs.getString("Respuesta4"); break;
                         default: textoCorrecta = ""; break;
-                    }
+                    } */
 
                     if (resElegida == correcta) {
-                        out.println("<h2>¡Correcto!</h2>");
-                        out.println("<p>Puedes continuar avanzando.</p>");
                         acierto = 1;
-                        // Continua el turno del jugador
-                        // Permitir otro lanzamiento de dado
+                        // ACIERTO - Continua el turno del jugador + Permitir otro lanzamiento de dado
                     } else {
-                        out.println("<h2>¡Incorrecto!</h2>");
-                        out.println("<p>Lo sentimos, la respuesta correcta era: " + textoCorrecta + "</p>");
                         acierto = 0;
-                        // Termina el turno del jugador
+                        // FALLO - Termina el turno del jugador
                     }
                 } else {
                     out.println("<h2>Error</h2>");
                     out.println("<p>No se encontró la pregunta en la base de datos.</p>");
                 }
 
-                System.out.println("Valor de acierto antes de enviar a tablero: " + acierto);
-                System.out.println("Redirigiendo a: tablero?acierto=" + acierto + "&IdPartida=" + idPartida);
-                out.println("<a href='tablero?acierto=" + acierto +  "&IdPartida=" + idPartida +"'>Volver al juego</a>");
-                out.println("</BODY><HTML>");
-                
-                rs.close();
-                st.close();
-                con.close();
-                out.close();
+                res.sendRedirect("tablero?acierto=" + acierto + "&IdPartida=" + idPartida);
+                return;
             }
             catch (Exception e) {
                 System.err.println(e);
             }
-
     }
 }

@@ -197,6 +197,14 @@ public class Tablero extends HttpServlet {
                 out.println("</form>");
             }
 
+            if(acierto == 1) {
+                out.println("<h2>Respuesta correcta</h2>");
+                out.println("<p>Vuelve a lanzar el dado</p>");
+            } else if (acierto == 0) {
+                out.println("<h2>Respuesta incorrecta</h2>");
+                out.println("<p>Pierdes el turno</p>");
+            }
+
             out.println("<br>");
             out.println("<div id='dado-container'>");
             out.println("<form action='Dado' method='GET'>");
