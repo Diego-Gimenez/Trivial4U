@@ -24,7 +24,7 @@ public class ValidarRespuesta extends HttpServlet {
             out.println("<html><body>");
             out.println("<h2>Error: Falta información.</h2>");
             out.println("<p>No se ha recibido una pregunta o respuesta válida.</p>");
-            out.println("<a href='tablero'>Volver al juego</a>");
+            out.println("<a href='Tablero'>Volver al juego</a>");
             out.println("</body></html>");
             return;
         }
@@ -69,7 +69,7 @@ public class ValidarRespuesta extends HttpServlet {
                     out.println("<p>No se encontró la pregunta en la base de datos.</p>");
                 }
 
-                res.sendRedirect("tablero?acierto=" + acierto + "&IdPartida=" + idPartida);
+                res.sendRedirect("Tablero?acierto=" + acierto + "&IdPartida=" + idPartida);
                 return;
             }
             catch (Exception e) {

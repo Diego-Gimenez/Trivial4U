@@ -104,6 +104,7 @@ public class UnirsePartida extends HttpServlet {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyecto", "root", "");
 
             // Actualizar la partida asignando al usuario como contrincante
+            // insert en detallespartida contrincante, idpartida, turno?, NUMCASILLA = 9
             String sql = "UPDATE partida SET contrincante = ? WHERE IdPartida = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, idUsuario);

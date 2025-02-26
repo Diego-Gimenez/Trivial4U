@@ -36,7 +36,7 @@ public class CrearPartida extends HttpServlet {
                     idPartidaGenerada = rs.getInt(1);  // Obtén el ID de la partida recién creada
 
                     PreparedStatement ps2 = con.prepareStatement("INSERT INTO detallespartida (IdJugador, IdPartida, Turno, NumCasilla)"+
-                    "VALUES (?, ?, 1, 41)", Statement.RETURN_GENERATED_KEYS); // Insertar el creador de la partida en la tabla detallespartida
+                    "VALUES (?, ?, 1, 1)", Statement.RETURN_GENERATED_KEYS); // Insertar el creador de la partida en la tabla detallespartida
                     ps2.setInt(1, idCreador);
                     ps2.setInt(2, idPartidaGenerada);
                     ps2.executeUpdate();

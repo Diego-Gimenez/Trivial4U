@@ -5,11 +5,11 @@ import java.sql.*;
 public class Tablero extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
         Connection con;
-        Statement st, stJ1, stJ2, st2, st3;
-        ResultSet rs, rsJ1, rsJ2, rs2, rs3;
+        Statement st, stJ1, stJ2, st2, st3, stJugador, st4;
+        ResultSet rs, rsJ1, rsJ2, rs2, rs3, rsJugador, rs4;
         rs3 = null;
         PrintWriter out;
-        String SQL, SQLJ1, SQLJ2, SQL2, SQL3;
+        String SQL, SQLJ1, SQLJ2, SQL2, SQL3, SQLJugador, SQL4;
         String resultado = req.getParameter("numero");
         String nuevaPosicion1 = req.getParameter("pos1");
         String nuevaPosicion2 = req.getParameter("pos2");
@@ -42,8 +42,9 @@ public class Tablero extends HttpServlet {
                 System.out.println("Error al convertir acierto: " + aciertoPregunta);
             }
         }
-        System.out.println("Valor de acierto en tablero.java después de recibir parámetro: " + acierto);
+        System.out.println("Valor de acierto en Tablero.java después de recibir parámetro: " + acierto);
         // test
+
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyecto?useUnicode=true&characterEncoding=UTF-8", "root", "");
@@ -52,12 +53,19 @@ public class Tablero extends HttpServlet {
             SQL = "SELECT * FROM tablero ORDER BY Fila, Columna";
             rs = st.executeQuery(SQL);
 
+            stJugador = con.createStatement();
+            SQLJugador = "SELECT idCreador, contrincante from partida WHERE IdPartida = " + idPartida;
+            rsJugador = stJugador.executeQuery(SQLJugador);
+
+            int idJugador1 = rsJugador.getInt("idCreador");
+            int idJugador2 = rsJugador.getInt("contrincante");
+
             stJ1 = con.createStatement();
-            SQLJ1 = "SELECT NumCasilla FROM detallespartida WHERE IdPartida = " + idPartida + " AND IdJugador = 1";
+            SQLJ1 = "SELECT NumCasilla FROM detallespartida INNER JOIN partida ON detallespartida.IdPartida = partida.IdPartida WHERE detallespartida.IdPartida =" + idPartida + " AND partida.idCreador = " + idJugador1;
             rsJ1 = stJ1.executeQuery(SQLJ1);
 
             stJ2 = con.createStatement();
-            SQLJ2 = "SELECT NumCasilla FROM detallespartida WHERE IdPartida = " + idPartida + " AND IdJugador = 2";
+            SQLJ2 = "SELECT NumCasilla FROM detallespartida INNER JOIN partida ON detallespartida.IdPartida = partida.IdPartida WHERE detallespartida.IdPartida =" + idPartida + " AND partida.contrincante = " + idJugador2;
             rsJ2 = stJ2.executeQuery(SQLJ2);
 
             out = res.getWriter();
@@ -197,22 +205,40 @@ public class Tablero extends HttpServlet {
                 out.println("</form>");
             }
 
+            st4 = con.createStatement();
+            SQL4 = "SELECT IdJugador FROM detallespartida WHERE Turno = 1 AND IdPartida = " + idPartida;
+            rs4 = st4.executeQuery(SQL4);
+            int JugadorTurno = rs4.getInt("IdJugador");
+
             if(acierto == 1) {
                 out.println("<h2>Respuesta correcta</h2>");
                 out.println("<p>Vuelve a lanzar el dado</p>");
+
             } else if (acierto == 0) {
                 out.println("<h2>Respuesta incorrecta</h2>");
                 out.println("<p>Pierdes el turno</p>");
+                if (JugadorTurno == idJugador1) {
+                    st.executeUpdate("UPDATE detallespartida SET Turno = 0 WHERE IdPartida = " + idPartida + " AND IdJugador = " + idJugador1);
+                    st.executeUpdate("UPDATE detallespartida SET Turno = 1 WHERE IdPartida = " + idPartida + " AND IdJugador = " + idJugador2);
+                } else if (JugadorTurno == idJugador2) {
+                    st.executeUpdate("UPDATE detallespartida SET Turno = 0 WHERE IdPartida = " + idPartida + " AND IdJugador = " + idJugador2);
+                    st.executeUpdate("UPDATE detallespartida SET Turno = 1 WHERE IdPartida = " + idPartida + " AND IdJugador = " + idJugador1);
+                } else {
+                    out.println("<p>Error actualizando turnos</p>");
+                }
             }
 
             out.println("<br>");
-            out.println("<div id='dado-container'>");
-            out.println("<form action='Dado' method='GET'>");
-            out.println("<input type='hidden' name='IdPartida' value='" + idPartida + "'>");
-            out.println("<button type='submit'>&#127922;</button>");
-            out.println("</form>");
-            out.println("<div id='resultadoDado1'><strong>" + resultado + "</strong></div>");
-            out.println("</div>");
+
+            // if (turno = 1) {
+                out.println("<div id='dado-container'>");
+                out.println("<form action='Dado' method='GET'>");
+                out.println("<input type='hidden' name='IdPartida' value='" + idPartida + "'>");
+                out.println("<button type='submit'>&#127922;</button>");
+                out.println("</form>");
+                out.println("<div id='resultadoDado1'><strong>" + resultado + "</strong></div>");
+                out.println("</div>");
+            //}
 
             out.println("</body></html>");
             rs.close();
@@ -222,7 +248,7 @@ public class Tablero extends HttpServlet {
         }
         catch (Exception e) {
             out = res.getWriter();
-            e.printStackTrace(); // Esto imprimirá el error en los logs
+            e.printStackTrace();
             out.println("<p>Error al conectar con la base de datos: " + e.getMessage() + "</p>");
         }
     }
