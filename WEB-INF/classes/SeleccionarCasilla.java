@@ -9,7 +9,7 @@ public class SeleccionarCasilla extends HttpServlet {
         String SQL, SQL2, SQL3;
         ResultSet rs2, rs3;
         int nuevaPosicion = 0;
-        String IdPregunta = "0";
+        int IdPregunta = 0;
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -17,30 +17,50 @@ public class SeleccionarCasilla extends HttpServlet {
             st = con.createStatement();
 
             String nuevaCasilla = req.getParameter("casilla");
-            if (nuevaCasilla != null) {
+            String idJugador = req.getParameter("idJugador");
+            String aciertoPregunta = req.getParameter("acierto");
+            int acierto = -1;
+
+            if (aciertoPregunta != null && !aciertoPregunta.isEmpty()) {
+                acierto = Integer.parseInt(aciertoPregunta);
+            }
+            System.out.println("Valor de acierto recibido: " + acierto);
+
+            if (nuevaCasilla != null && idJugador != null) {
                 nuevaPosicion = Integer.parseInt(nuevaCasilla);
-                SQL = "UPDATE detallespartida SET NumCasilla = " + nuevaPosicion + " WHERE IdJugador = 1";
+                
+                SQL = "UPDATE detallespartida SET NumCasilla = " + nuevaPosicion +  " WHERE IdPartida = 1 AND IdJugador = " + idJugador;
                 st.executeUpdate(SQL);
 
                 st2 = con.createStatement();
-                SQL2 = "SELECT * from tablero WHERE NumeroCasilla = " + nuevaPosicion;
+                SQL2 = "SELECT IdCategoria from tablero WHERE NumeroCasilla = " + nuevaPosicion;
                 rs2 = st2.executeQuery(SQL2);
                 int categoria = 0;
+
                 if (rs2.next()) {
-                    String IdCat = rs2.getString("IdCategoria");
-                    categoria = Integer.parseInt(IdCat);
+                    categoria = rs2.getInt("IdCategoria");
                 }
 
                 st3 = con.createStatement();
                 SQL3 = "SELECT IdPregunta FROM preguntas WHERE IdCategoria = " + categoria +  " ORDER BY RAND() LIMIT 1";
                 rs3 = st3.executeQuery(SQL3);
+                
                 if (rs3.next()) {
-                    IdPregunta = rs3.getString("IdPregunta");
+                    IdPregunta = rs3.getInt("IdPregunta");
                 } else {
-                    IdPregunta = "0";
+                    IdPregunta = 0;
                 }
+                
+                if (IdPregunta != 0 || acierto == 0) {
+                    if (idJugador.equals("1")) {
+                        st.executeUpdate("UPDATE detallespartida SET Turno = 0 WHERE IdPartida = 1 AND IdJugador = 1");
+                        st.executeUpdate("UPDATE detallespartida SET Turno = 1 WHERE IdPartida = 1 AND IdJugador = 2");
+                    } else if (idJugador.equals("2")) {
+                        st.executeUpdate("UPDATE detallespartida SET Turno = 0 WHERE IdPartida = 1 AND IdJugador = 2");
+                        st.executeUpdate("UPDATE detallespartida SET Turno = 1 WHERE IdPartida = 1 AND IdJugador = 1");
+                    }
+                } 
             }
-
             st.close();
             con.close();
         } catch (Exception e) {

@@ -5,17 +5,19 @@ import java.sql.*;
 public class Tablero extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
         Connection con;
-        Statement st, st2, st3;
-        ResultSet rs, rs2, rs3;
+        Statement st, stJ1, stJ2, st2, st3;
+        ResultSet rs, rsJ1, rsJ2, rs2, rs3;
         rs3 = null;
         PrintWriter out;
-        String SQL, SQL2, SQL3;
+        String SQL, SQLJ1, SQLJ2, SQL2, SQL3;
         String resultado = req.getParameter("numero");
         String nuevaPosicion1 = req.getParameter("pos1");
         String nuevaPosicion2 = req.getParameter("pos2");
         String IdPregunta = req.getParameter("idpregunta");
+        String aciertoPregunta = req.getParameter("acierto");
         int pos1 = -1;
         int pos2 = -1;
+        int acierto = -1;
 
         if (nuevaPosicion1 != null && !nuevaPosicion1.isEmpty()) {
             pos1 = Integer.parseInt(nuevaPosicion1);
@@ -24,17 +26,33 @@ public class Tablero extends HttpServlet {
         if (nuevaPosicion2 != null && !nuevaPosicion2.isEmpty()) {
             pos2 = Integer.parseInt(nuevaPosicion2);
         }
-
-
+        // test
+        if (aciertoPregunta != null && !aciertoPregunta.isEmpty()) {
+            // acierto = Integer.parseInt(aciertoPregunta);
+            try {
+                acierto = Integer.parseInt(aciertoPregunta);
+            } catch (NumberFormatException e) {
+                System.out.println("Error al convertir acierto: " + aciertoPregunta);
+            }
+        }
+        System.out.println("Valor de acierto en tablero.java después de recibir parámetro: " + acierto);
+        // test
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyecto?useUnicode=true&characterEncoding=UTF-8", "root", "");
+           
             st = con.createStatement();
             SQL = "SELECT * FROM tablero ORDER BY Fila, Columna";
             rs = st.executeQuery(SQL);
-            st2 = con.createStatement();
-            SQL2 = "SELECT NumCasilla FROM detallespartida";
-            rs2 = st2.executeQuery(SQL2);
+
+            stJ1 = con.createStatement();
+            SQLJ1 = "SELECT NumCasilla FROM detallespartida WHERE IdPartida = 1 AND IdJugador = 1";
+            rsJ1 = stJ1.executeQuery(SQLJ1);
+
+            stJ2 = con.createStatement();
+            SQLJ2 = "SELECT NumCasilla FROM detallespartida WHERE IdPartida = 1 AND IdJugador = 2";
+            rsJ2 = stJ2.executeQuery(SQLJ2);
+
             out = res.getWriter();
             res.setContentType("text/html; charset=UTF-8");
             res.setCharacterEncoding("UTF-8");
@@ -44,9 +62,14 @@ public class Tablero extends HttpServlet {
                 resultado = "Lanzar dado";
             }
 
-            int posicion = -1;
-            if (rs2.next()) {
-                posicion = rs2.getInt("NumCasilla");
+            int posicionJ1 = -1;
+            if (rsJ1.next()) {
+                posicionJ1 = rsJ1.getInt("NumCasilla");
+            }
+
+            int posicionJ2 = -1;
+            if (rsJ2.next()) {
+                posicionJ2 = rsJ2.getInt("NumCasilla");
             }
 
             if (IdPregunta != "0") {
@@ -76,16 +99,31 @@ public class Tablero extends HttpServlet {
                     }
                 }
                 String contenido = rs.getString("Contenido");
-                if (contenido == null) contenido = ""; 
+                if (contenido == null) contenido = "";
                 contenido = contenido.replace("🎲", "&#127922;");
                 contenido = contenido.replace("▲", "&#9650;");
 
-                if (id == posicion) {
+                if (id == posicionJ1) {
                     contenido += "<div id='ficha' class='ficha'>1</div>";
+                }
+
+                if (id == posicionJ2) {
+                    contenido += "<div id='ficha2' class='ficha2'>2</div>";
                 }
                 
                 if (id == pos1 || id == pos2) {
+                    st2 = con.createStatement();
+                    SQL2 = "SELECT * FROM detallespartida WHERE Turno = 1";
+                    rs2 = st2.executeQuery(SQL2);
+
+                    int idJugador = -1;
+                    if (rs2.next()) {
+                        idJugador = rs2.getInt("IdJugador");
+                    }
+                    System.out.println("Formulario generado con acierto: " + acierto);
                     contenido = "<form action='SeleccionarCasilla' method='POST'>" +
+                                "<input type='hidden' name='idJugador' value='" + idJugador + "'>" +
+                                "<input type='hidden' name='acierto' value='" + acierto + "'>" +
                                 "<input type='hidden' name='casilla' value='" + id + "'>" +
                                 "<button type='submit' class='seleccionar-casilla'>&#10004;</button>" +
                                 "</form>";
@@ -137,18 +175,17 @@ public class Tablero extends HttpServlet {
                 String res2 = rs3.getString("Respuesta2");
                 String res3 = rs3.getString("Respuesta3");
                 String res4 = rs3.getString("Respuesta4");
+                String idPregunta = rs3.getString("IdPregunta");
 
                 out.println("<h2>" + pregunta + "</h2>");
                 out.println("<form action='ValidarRespuesta' method='GET'>");
-                out.println("<input type='radio' name='respuesta' value='" + res1 + "' required> " + res1 + "<br>");
-                out.println("<input type='radio' name='respuesta' value='" + res2 + "'> " + res2 + "<br>");
-                out.println("<input type='radio' name='respuesta' value='" + res3 + "'> " + res3 + "<br>");
-                out.println("<input type='radio' name='respuesta' value='" + res4 + "'> " + res4 + "<br>");
+                out.println("<input type='hidden' name='IdPregunta' value='" + idPregunta + "'>");
+                out.println("<input type='radio' name='respuesta' value='" + "1" + "' required> " + res1 + "<br>");
+                out.println("<input type='radio' name='respuesta' value='" + "2" + "'> " + res2 + "<br>");
+                out.println("<input type='radio' name='respuesta' value='" + "3" + "'> " + res3 + "<br>");
+                out.println("<input type='radio' name='respuesta' value='" + "4" + "'> " + res4 + "<br>");
                 out.println("<input type='submit' value='Responder'>");
                 out.println("</form>");
-
-            } else {
-            out.println("No hay preguntas disponibles en esta categoría.");
             }
 
             out.println("<br>");

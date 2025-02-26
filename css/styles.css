@@ -122,7 +122,18 @@ body {
 }
 
 #ficha2 {
+    width: 15px;
+    height: 15px;
     background-color: #ff6600;
+    border-radius: 50%;
+    position: absolute;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    color: white;
+    border: 2px solid black;
 }
 
 #controles {
