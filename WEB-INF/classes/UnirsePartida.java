@@ -8,26 +8,44 @@ public class UnirsePartida extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         res.setContentType("text/html");
         PrintWriter out = res.getWriter();
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        // Obtener el ID del usuario desde la sesión
+        HttpSession session = req.getSession();
+        Integer idUsuario = (Integer) session.getAttribute("IdJugador");
+
+        // Si no hay sesión o el usuario no tiene un ID, redirigir al login
+        if (idUsuario == null) {
+            res.sendRedirect("login.html");
+            return;
+        }
+
+        System.out.println("ID del usuario en sesión: " + idUsuario); // Depuración
 
         try {
-            // Cargar el driver de MySQL
+            // Conectar con la base de datos
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyecto", "root", "");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyecto", "root", "");
 
-            // Consulta para obtener partidas activas con un solo jugador (contrincante NULL)
+            // Consulta filtrando las partidas creadas por el usuario en sesión
             String sql = "SELECT p.IdPartida, p.nombrePartida, j.nombre AS nombreCreador " +
                          "FROM partida p " +
                          "JOIN jugadores j ON p.idCreador = j.IdJugador " +
-                         "WHERE p.activa = 1 AND p.contrincante IS NULL";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+                         "WHERE p.activa = 1 AND p.contrincante IS NULL AND p.idCreador <> ?";
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, idUsuario);  // Asignar el parámetro
+            rs = ps.executeQuery();
 
-            // Generar la respuesta HTML en el servidor
+            // Generar HTML
             out.println("<html><head><title>Unirse a una Partida</title></head><body>");
             out.println("<h1>Partidas Disponibles para Unirse</h1>");
             out.println("<table border='1'><tr><th>ID</th><th>Nombre de Partida</th><th>Creador</th><th>Unirse</th></tr>");
 
+            boolean hayPartidas = false;
             while (rs.next()) {
+                hayPartidas = true;
                 int idPartida = rs.getInt("IdPartida");
                 String nombrePartida = rs.getString("nombrePartida");
                 String nombreCreador = rs.getString("nombreCreador");
@@ -43,13 +61,17 @@ public class UnirsePartida extends HttpServlet {
                 out.println("</tr>");
             }
             out.println("</table>");
-            out.println("</body></html>");
 
-            rs.close();
-            ps.close();
-            con.close();
+            if (!hayPartidas) {
+                out.println("<p>No hay partidas disponibles para unirse en este momento.</p>");
+            }
+
+            out.println("</body></html>");
         } catch (Exception e) {
-            out.println("Error al obtener las partidas: " + e.getMessage());
+            out.println("<p>Error al obtener las partidas: " + e.getMessage() + "</p>");
+            e.printStackTrace(); // Imprime el error en la consola del servidor
+        } finally {
+            try { if (rs != null) rs.close(); if (ps != null) ps.close(); if (con != null) con.close(); } catch (SQLException ignored) {}
         }
         out.close();
     }
@@ -59,10 +81,22 @@ public class UnirsePartida extends HttpServlet {
 
         // Obtener el ID del usuario desde la sesión
         HttpSession session = req.getSession();
-        int idUsuario = (session.getAttribute("IdJugador") != null) ? (int) session.getAttribute("IdJugador") : -1;
+        Integer idUsuario = (Integer) session.getAttribute("IdJugador");
+
+        // Si no hay sesión, redirigir al login
+        if (idUsuario == null) {
+            res.sendRedirect("login.html");
+            return;
+        }
 
         // Obtener el ID de la partida
-        int idPartida = Integer.parseInt(req.getParameter("idPartida"));
+        int idPartida;
+        try {
+            idPartida = Integer.parseInt(req.getParameter("idPartida"));
+        } catch (NumberFormatException e) {
+            res.getWriter().println("Error: ID de partida inválido.");
+            return;
+        }
 
         try {
             // Conexión a la base de datos
@@ -79,20 +113,15 @@ public class UnirsePartida extends HttpServlet {
             ps.close();
             con.close();
 
-            // Si la actualización fue exitosa, generar la página del tablero directamente
+            // Si la actualización fue exitosa, redirigir al tablero
             if (filasActualizadas > 0) {
-                res.setContentType("text/html");
-                PrintWriter out = res.getWriter();
-                out.println("<html><head><title>Tablero de Juego</title></head><body>");
-                out.println("<h1>Bienvenido al Tablero de la Partida " + idPartida + "</h1>");
-                out.println("<p>Has sido unido correctamente a la partida. ¡Buena suerte!</p>");
-                out.println("<a href='Tablero?partida=" + idPartida + "'>Ir al Tablero</a>");
-                out.println("</body></html>");
+                res.sendRedirect("Tablero?IdPartida=" + idPartida);
             } else {
                 res.getWriter().println("Error al unirse a la partida.");
             }
         } catch (Exception e) {
             res.getWriter().println("Error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
