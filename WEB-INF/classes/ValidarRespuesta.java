@@ -47,7 +47,7 @@ public class ValidarRespuesta extends HttpServlet {
 
                 if (rs.next()) {
                     int correcta = rs.getInt("Correcta");
-                    
+                    /* 
                     String textoCorrecta = "";
                     switch (correcta) {
                         case 1: textoCorrecta = rs.getString("Respuesta1"); break;
@@ -55,7 +55,7 @@ public class ValidarRespuesta extends HttpServlet {
                         case 3: textoCorrecta = rs.getString("Respuesta3"); break;
                         case 4: textoCorrecta = rs.getString("Respuesta4"); break;
                         default: textoCorrecta = ""; break;
-                    }
+                    }*/
 
                     if (resElegida == correcta) {
                         acierto = 1;
