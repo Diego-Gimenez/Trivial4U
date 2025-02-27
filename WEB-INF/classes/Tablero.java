@@ -229,9 +229,11 @@ public class Tablero extends HttpServlet {
                 if (JugadorTurno == idJugador1) {
                     st.executeUpdate("UPDATE detallespartida SET Turno = 0 WHERE IdPartida = " + idPartida + " AND IdJugador = " + idJugador1);
                     st.executeUpdate("UPDATE detallespartida SET Turno = 1 WHERE IdPartida = " + idPartida + " AND IdJugador = " + idJugador2);
+                    acierto = -1; // test
                 } else if (JugadorTurno == idJugador2) {
                     st.executeUpdate("UPDATE detallespartida SET Turno = 0 WHERE IdPartida = " + idPartida + " AND IdJugador = " + idJugador2);
                     st.executeUpdate("UPDATE detallespartida SET Turno = 1 WHERE IdPartida = " + idPartida + " AND IdJugador = " + idJugador1);
+                    acierto = -1; // test
                 } else {
                     out.println("<p>Error actualizando turnos. TurnoJugador = " + JugadorTurno + "</p>");
                 }
@@ -239,7 +241,7 @@ public class Tablero extends HttpServlet {
 
             out.println("<br>");
 
-            if (acierto != 0) {
+            if (acierto != 0) { // que dependa de acierto y turno
                 out.println("<div id='dado-container'>");
                 out.println("<form action='Dado' method='GET'>");
                 out.println("<input type='hidden' name='IdPartida' value='" + idPartida + "'>");
