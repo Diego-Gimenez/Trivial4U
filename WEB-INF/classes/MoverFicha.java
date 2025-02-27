@@ -69,8 +69,8 @@ public class MoverFicha extends HttpServlet {
                 return;
             }
 
-            out.println("<p>Error con los turnos</p>");
-            res.sendRedirect("Tablero?NumCasilla&IdPartida=" + idPartida);
+            System.out.println("Error con los turnos");
+            res.sendRedirect("Tablero?NumCasilla=" + posicionActual + "&IdPartida=" + idPartida);
             // res.sendRedirect("Tablero?NumCasilla&acierto=" + acierto);
             return;
         }

@@ -57,15 +57,20 @@ public class Tablero extends HttpServlet {
             SQLJugador = "SELECT idCreador, contrincante from partida WHERE IdPartida = " + idPartida;
             rsJugador = stJugador.executeQuery(SQLJugador);
 
-            int idJugador1 = rsJugador.getInt("idCreador");
-            int idJugador2 = rsJugador.getInt("contrincante");
+            int idJugador1 = -1;
+            int idJugador2 = -1;
+
+            if (rsJugador.next()) {
+                idJugador1 = rsJugador.getInt("idCreador");
+                idJugador2 = rsJugador.getInt("contrincante");
+            }
 
             stJ1 = con.createStatement();
-            SQLJ1 = "SELECT NumCasilla FROM detallespartida INNER JOIN partida ON detallespartida.IdPartida = partida.IdPartida WHERE detallespartida.IdPartida =" + idPartida + " AND partida.idCreador = " + idJugador1;
+            SQLJ1 = "SELECT NumCasilla FROM detallespartida INNER JOIN partida ON detallespartida.IdPartida = partida.IdPartida WHERE detallespartida.IdPartida =" + idPartida + " AND detallespartida.IdJugador = " + idJugador1;
             rsJ1 = stJ1.executeQuery(SQLJ1);
 
             stJ2 = con.createStatement();
-            SQLJ2 = "SELECT NumCasilla FROM detallespartida INNER JOIN partida ON detallespartida.IdPartida = partida.IdPartida WHERE detallespartida.IdPartida =" + idPartida + " AND partida.contrincante = " + idJugador2;
+            SQLJ2 = "SELECT NumCasilla FROM detallespartida INNER JOIN partida ON detallespartida.IdPartida = partida.IdPartida WHERE detallespartida.IdPartida =" + idPartida + " AND detallespartida.IdJugador = " + idJugador2;
             rsJ2 = stJ2.executeQuery(SQLJ2);
 
             out = res.getWriter();
@@ -208,7 +213,11 @@ public class Tablero extends HttpServlet {
             st4 = con.createStatement();
             SQL4 = "SELECT IdJugador FROM detallespartida WHERE Turno = 1 AND IdPartida = " + idPartida;
             rs4 = st4.executeQuery(SQL4);
-            int JugadorTurno = rs4.getInt("IdJugador");
+
+            int JugadorTurno = -1;
+            if (rs4.next()) {
+                JugadorTurno = rs4.getInt("IdJugador");
+            }
 
             if(acierto == 1) {
                 out.println("<h2>Respuesta correcta</h2>");
@@ -224,13 +233,13 @@ public class Tablero extends HttpServlet {
                     st.executeUpdate("UPDATE detallespartida SET Turno = 0 WHERE IdPartida = " + idPartida + " AND IdJugador = " + idJugador2);
                     st.executeUpdate("UPDATE detallespartida SET Turno = 1 WHERE IdPartida = " + idPartida + " AND IdJugador = " + idJugador1);
                 } else {
-                    out.println("<p>Error actualizando turnos</p>");
+                    out.println("<p>Error actualizando turnos. TurnoJugador = " + JugadorTurno + "</p>");
                 }
             }
 
             out.println("<br>");
 
-            // if (turno = 1) {
+            if (acierto != 0) {
                 out.println("<div id='dado-container'>");
                 out.println("<form action='Dado' method='GET'>");
                 out.println("<input type='hidden' name='IdPartida' value='" + idPartida + "'>");
@@ -238,7 +247,9 @@ public class Tablero extends HttpServlet {
                 out.println("</form>");
                 out.println("<div id='resultadoDado1'><strong>" + resultado + "</strong></div>");
                 out.println("</div>");
-            //}
+            } else {
+                out.println("<p>Es el turno del otro jugador</p>");
+            }
 
             out.println("</body></html>");
             rs.close();
