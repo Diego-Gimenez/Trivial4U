@@ -33,9 +33,7 @@ public class Tablero extends HttpServlet {
             idPartida = Integer.parseInt(IdPartida);
         }
 
-        // test
         if (aciertoPregunta != null && !aciertoPregunta.isEmpty()) {
-            // acierto = Integer.parseInt(aciertoPregunta);
             try {
                 acierto = Integer.parseInt(aciertoPregunta);
             } catch (NumberFormatException e) {
@@ -43,7 +41,6 @@ public class Tablero extends HttpServlet {
             }
         }
         System.out.println("Valor de acierto en Tablero.java después de recibir parámetro: " + acierto);
-        // test
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -100,6 +97,21 @@ public class Tablero extends HttpServlet {
                 out.println("Volver a tirar");
             }
 
+            // test
+            st4 = con.createStatement();
+            SQL4 = "SELECT IdJugador FROM detallespartida WHERE Turno = 1 AND IdPartida = " + idPartida;
+            rs4 = st4.executeQuery(SQL4);
+
+            int JugadorTurno = -1;
+            if (rs4.next()) {
+                JugadorTurno = rs4.getInt("IdJugador");
+            } 
+            
+            int jugadorActual = -1;
+            if (req.getSession().getAttribute("IdJugador") != null) {
+                jugadorActual = (int) req.getSession().getAttribute("IdJugador");
+            } // test
+
             while (rs.next()) {
                 int id = rs.getInt("NumeroCasilla");
                 int fila = rs.getInt("Fila");
@@ -131,7 +143,8 @@ public class Tablero extends HttpServlet {
                     contenido += "<div id='ficha2' class='ficha2'>2</div>";
                 }
                 
-                if (id == pos1 || id == pos2) {
+                // if (id == pos1 || id == pos2) {
+                if ((id == pos1 || id == pos2) && JugadorTurno == jugadorActual) {
                     st2 = con.createStatement();
                     SQL2 = "SELECT * FROM detallespartida WHERE Turno = 1 AND IdPartida = " + idPartida;
                     rs2 = st2.executeQuery(SQL2);
@@ -210,6 +223,7 @@ public class Tablero extends HttpServlet {
                 out.println("</form>");
             }
 
+            /* 
             st4 = con.createStatement();
             SQL4 = "SELECT IdJugador FROM detallespartida WHERE Turno = 1 AND IdPartida = " + idPartida;
             rs4 = st4.executeQuery(SQL4);
@@ -218,6 +232,7 @@ public class Tablero extends HttpServlet {
             if (rs4.next()) {
                 JugadorTurno = rs4.getInt("IdJugador");
             }
+            */
 
             if(acierto == 1) {
                 out.println("<h2>Respuesta correcta</h2>");
@@ -229,19 +244,24 @@ public class Tablero extends HttpServlet {
                 if (JugadorTurno == idJugador1) {
                     st.executeUpdate("UPDATE detallespartida SET Turno = 0 WHERE IdPartida = " + idPartida + " AND IdJugador = " + idJugador1);
                     st.executeUpdate("UPDATE detallespartida SET Turno = 1 WHERE IdPartida = " + idPartida + " AND IdJugador = " + idJugador2);
-                    acierto = -1; // test
+                    acierto = -1;
                 } else if (JugadorTurno == idJugador2) {
                     st.executeUpdate("UPDATE detallespartida SET Turno = 0 WHERE IdPartida = " + idPartida + " AND IdJugador = " + idJugador2);
                     st.executeUpdate("UPDATE detallespartida SET Turno = 1 WHERE IdPartida = " + idPartida + " AND IdJugador = " + idJugador1);
-                    acierto = -1; // test
+                    acierto = -1;
                 } else {
                     out.println("<p>Error actualizando turnos. TurnoJugador = " + JugadorTurno + "</p>");
                 }
             }
+            /* 
+            int jugadorActual = -1;
+            if (req.getSession().getAttribute("IdJugador") != null) {
+                jugadorActual = (int) req.getSession().getAttribute("IdJugador");
+            } */
 
             out.println("<br>");
 
-            if (acierto != 0) { // que dependa de acierto y turno
+            if (JugadorTurno == jugadorActual && acierto != 0 || IdPregunta == "0") { // que dependa de acierto y turno
                 out.println("<div id='dado-container'>");
                 out.println("<form action='Dado' method='GET'>");
                 out.println("<input type='hidden' name='IdPartida' value='" + idPartida + "'>");

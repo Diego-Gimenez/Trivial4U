@@ -9,7 +9,7 @@ public class SeleccionarCasilla extends HttpServlet {
         String SQL, SQL2, SQL3;
         ResultSet rs2, rs3;
         int nuevaPosicion = 0;
-        int IdPregunta = 0;
+        int IdPregunta = -1;
         int idPartida = 0;
         
         try {
@@ -56,6 +56,16 @@ public class SeleccionarCasilla extends HttpServlet {
                 } else {
                     IdPregunta = 0;
                 }
+                /* 
+                if (IdPregunta != 0 || acierto == 0) {
+                    if (idJugador.equals("1")) {
+                        st.executeUpdate("UPDATE detallespartida SET Turno = 0 WHERE IdPartida = " + idPartida + " AND IdJugador = 1");
+                        st.executeUpdate("UPDATE detallespartida SET Turno = 1 WHERE IdPartida = " + idPartida + " AND IdJugador = 2");
+                    } else if (idJugador.equals("2")) {
+                        st.executeUpdate("UPDATE detallespartida SET Turno = 0 WHERE IdPartida = " + idPartida + " AND IdJugador = 2");
+                        st.executeUpdate("UPDATE detallespartida SET Turno = 1 WHERE IdPartida = " + idPartida + " AND IdJugador = 1");
+                    }
+                }  */
             }
             st.close();
             con.close();
