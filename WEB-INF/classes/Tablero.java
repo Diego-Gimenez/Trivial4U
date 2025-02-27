@@ -97,7 +97,6 @@ public class Tablero extends HttpServlet {
                 out.println("Volver a tirar");
             }
 
-            // test
             st4 = con.createStatement();
             SQL4 = "SELECT IdJugador FROM detallespartida WHERE Turno = 1 AND IdPartida = " + idPartida;
             rs4 = st4.executeQuery(SQL4);
@@ -110,7 +109,7 @@ public class Tablero extends HttpServlet {
             int jugadorActual = -1;
             if (req.getSession().getAttribute("IdJugador") != null) {
                 jugadorActual = (int) req.getSession().getAttribute("IdJugador");
-            } // test
+            } 
 
             while (rs.next()) {
                 int id = rs.getInt("NumeroCasilla");
@@ -143,7 +142,6 @@ public class Tablero extends HttpServlet {
                     contenido += "<div id='ficha2' class='ficha2'>2</div>";
                 }
                 
-                // if (id == pos1 || id == pos2) {
                 if ((id == pos1 || id == pos2) && JugadorTurno == jugadorActual) {
                     st2 = con.createStatement();
                     SQL2 = "SELECT * FROM detallespartida WHERE Turno = 1 AND IdPartida = " + idPartida;
@@ -223,24 +221,16 @@ public class Tablero extends HttpServlet {
                 out.println("</form>");
             }
 
-            /* 
-            st4 = con.createStatement();
-            SQL4 = "SELECT IdJugador FROM detallespartida WHERE Turno = 1 AND IdPartida = " + idPartida;
-            rs4 = st4.executeQuery(SQL4);
-
-            int JugadorTurno = -1;
-            if (rs4.next()) {
-                JugadorTurno = rs4.getInt("IdJugador");
+            HttpSession session = req.getSession();
+            String mensaje = (String) session.getAttribute("mensaje");
+            if (mensaje != null) {
+                out.println(mensaje);
+                session.removeAttribute("mensaje"); 
             }
-            */
 
-            if(acierto == 1) {
-                out.println("<h2>Respuesta correcta</h2>");
-                out.println("<p>Vuelve a lanzar el dado</p>");
-
-            } else if (acierto == 0) {
-                out.println("<h2>Respuesta incorrecta</h2>");
-                out.println("<p>Pierdes el turno</p>");
+            if (acierto == 0) {
+                session.setAttribute("mensaje", "<h2>Respuesta incorrecta</h2><p>Pierdes el turno</p><p>Es el turno del otro jugador</p>");
+    
                 if (JugadorTurno == idJugador1) {
                     st.executeUpdate("UPDATE detallespartida SET Turno = 0 WHERE IdPartida = " + idPartida + " AND IdJugador = " + idJugador1);
                     st.executeUpdate("UPDATE detallespartida SET Turno = 1 WHERE IdPartida = " + idPartida + " AND IdJugador = " + idJugador2);
@@ -252,16 +242,9 @@ public class Tablero extends HttpServlet {
                 } else {
                     out.println("<p>Error actualizando turnos. TurnoJugador = " + JugadorTurno + "</p>");
                 }
-            }
-            /* 
-            int jugadorActual = -1;
-            if (req.getSession().getAttribute("IdJugador") != null) {
-                jugadorActual = (int) req.getSession().getAttribute("IdJugador");
-            } */
+                res.sendRedirect("Tablero?IdPartida=" + idPartida);
 
-            out.println("<br>");
-
-            if (JugadorTurno == jugadorActual && acierto != 0 || IdPregunta == "0") { // que dependa de acierto y turno
+            } else if (JugadorTurno == jugadorActual || IdPregunta == "0") {
                 out.println("<div id='dado-container'>");
                 out.println("<form action='Dado' method='GET'>");
                 out.println("<input type='hidden' name='IdPartida' value='" + idPartida + "'>");
@@ -269,9 +252,14 @@ public class Tablero extends HttpServlet {
                 out.println("</form>");
                 out.println("<div id='resultadoDado1'><strong>" + resultado + "</strong></div>");
                 out.println("</div>");
-            } else {
-                out.println("<p>Es el turno del otro jugador</p>");
+
+                if(acierto == 1) {
+                    out.println("<h2>Respuesta correcta</h2>");
+                    out.println("<p>Vuelve a lanzar el dado</p>");
+                }
             }
+
+            out.println("<br>");
 
             out.println("</body></html>");
             rs.close();
