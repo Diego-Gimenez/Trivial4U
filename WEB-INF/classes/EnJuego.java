@@ -25,15 +25,14 @@ public class EnJuego extends HttpServlet {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyecto", "root", "");
 
             // Consulta para obtener partidas activas donde el usuario es creador o contrincante
-            String sql = "SELECT p.IdPartida, p.nombrePartida, c.nombre AS nombreCreador, " +
+            String sql = "SELECT p.IdPartida, p.nombrePartida, d.Turno, c.nombre AS nombreCreador, " +
             "COALESCE(o.nombre, 'Esperando') AS nombreContrincante " +
             "FROM partida p " +
             "JOIN jugadores c ON p.idCreador = c.IdJugador " +
             "LEFT JOIN jugadores o ON p.contrincante = o.IdJugador " +
             "JOIN detallespartida d ON p.IdPartida = d.IdPartida " +  // JOIN con detallespartida
             "WHERE p.activa = 1 " +
-            "AND d.IdJugador = ? " +  // Solo partidas donde participa el usuario
-            "AND d.Turno = 1";        // Filtra por partidas donde es su turno
+            "AND d.IdJugador = ?"; // Solo partidas donde participa el usuario
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, idUsuario);  // Se usa una sola vez, ya que ahora el filtro es por detallespartida
@@ -42,13 +41,14 @@ public class EnJuego extends HttpServlet {
             // Generar la respuesta HTML
             out.println("<html><head><title>Partidas en Juego</title></head><body>");
             out.println("<h1>Mis Partidas en Juego</h1>");
-            out.println("<table border='1'><tr><th>ID</th><th>Nombre de Partida</th><th>Creador</th><th>Contrincante</th><th>Continuar</th></tr>");
+            out.println("<table border='1'><tr><th>ID</th><th>Nombre de Partida</th><th>Creador</th><th>Contrincante</th><th>Accion</th></tr>");
 
             while (rs.next()) {
                 int idPartida = rs.getInt("IdPartida");
                 String nombrePartida = rs.getString("nombrePartida");
                 String nombreCreador = rs.getString("nombreCreador");
                 String nombreContrincante = rs.getString("nombreContrincante");
+                int turno = rs.getInt("Turno");
 
                 out.println("<tr>");
                 out.println("<td>" + idPartida + "</td>");
@@ -57,7 +57,11 @@ public class EnJuego extends HttpServlet {
                 out.println("<td>" + nombreContrincante + "</td>");
                 out.println("<td><form action='Tablero' method='get'>");
                 out.println("<input type='hidden' name='IdPartida' value='" + idPartida + "'>");
-                out.println("<input type='submit' value='Continuar'>");
+                if (turno == 1) {
+                    out.println("<input type='submit' value='Continuar'>");
+                } else {
+                    out.println("<input type='submit' value='Ver'>");
+                }
                 out.println("</form></td>");
                 out.println("</tr>");
             }

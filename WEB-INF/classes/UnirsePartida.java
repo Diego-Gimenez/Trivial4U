@@ -103,15 +103,40 @@ public class UnirsePartida extends HttpServlet {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyecto", "root", "");
 
-            // Actualizar la partida asignando al usuario como contrincante
-            // insert en detallespartida contrincante, idpartida, turno?, NUMCASILLA = 9
-            String sql = "UPDATE partida SET contrincante = ? WHERE IdPartida = ?";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, idUsuario);
-            ps.setInt(2, idPartida);
-            int filasActualizadas = ps.executeUpdate();
+            String sqlSEL = "SELECT * FROM partida WHERE IdPartida = ? AND contrincante IS NULL";
+            PreparedStatement psSEL = con.prepareStatement(sqlSEL);
+            psSEL.setInt(1, idPartida);
+            ResultSet rsSEL = psSEL.executeQuery();
+            int turno = rsSEL.getInt("Turno"); // Obtener el turno del creador de la partida
 
-            ps.close();
+            rsSEL.next();
+            if (turno == 1) {
+                PreparedStatement psINS = con.prepareStatement("INSERT INTO detallespartida (IdJugador, IdPartida, Turno, NumCasilla)"+
+                "VALUES (?, ?, 0, 9)"); // Insertar al nuevo jugador de la partida en la tabla detallespartida
+                psINS.setInt(1, idUsuario);
+                psINS.setInt(2, idPartida);
+                psINS.executeUpdate();
+                psINS.close();
+            } else {
+                PreparedStatement psINS = con.prepareStatement("INSERT INTO detallespartida (IdJugador, IdPartida, Turno, NumCasilla)"+
+                "VALUES (?, ?, 1, 9)"); // Insertar al nuevo jugador de la partida en la tabla detallespartida
+                psINS.setInt(1, idUsuario);
+                psINS.setInt(2, idPartida);
+                psINS.executeUpdate();
+                psINS.close();
+            }
+
+            // Actualizar la partida asignando al usuario como contrincante
+            String sqlUP = "UPDATE partida SET contrincante = ? WHERE IdPartida = ?";
+            PreparedStatement psUP = con.prepareStatement(sqlUP);
+            psUP.setInt(1, idUsuario);
+            psUP.setInt(2, idPartida);
+            int filasActualizadas = psUP.executeUpdate();
+
+            // Cerrar recursos
+            rsSEL.close();
+            psSEL.close();
+            psUP.close();
             con.close();
 
             // Si la actualización fue exitosa, redirigir al tablero
