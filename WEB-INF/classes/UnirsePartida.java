@@ -103,11 +103,30 @@ public class UnirsePartida extends HttpServlet {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/proyecto", "root", "");
 
-            String sqlSEL = "SELECT * FROM partida WHERE IdPartida = ? AND contrincante IS NULL";
+            // Actualizar la partida asignando al usuario como contrincante
+            String sqlUP = "UPDATE partida SET contrincante = ? WHERE IdPartida = ?";
+            PreparedStatement psUP = con.prepareStatement(sqlUP);
+            psUP.setInt(1, idUsuario);
+            psUP.setInt(2, idPartida);
+            int filasActualizadas = psUP.executeUpdate();
+
+            // Obtener el turno del creador de la partida
+            String sqlSEL = "SELECT Turno FROM detallespartida WHERE IdPartida = ?";
             PreparedStatement psSEL = con.prepareStatement(sqlSEL);
             psSEL.setInt(1, idPartida);
             ResultSet rsSEL = psSEL.executeQuery();
-            int turno = rsSEL.getInt("Turno"); // Obtener el turno del creador de la partida
+
+            // Verificar si hay resultados antes de acceder a ellos
+            int turno = -1; // Valor por defecto si no encuentra la partida
+            if (rsSEL.next()) {
+                turno = rsSEL.getInt("Turno");
+            }
+
+            // Si la partida no tiene datos en detallespartida, evitar errores
+            if (turno == -1) {
+                res.getWriter().println("Error: No se encontró la partida en detallespartida.");
+                return;
+            }
 
             rsSEL.next();
             if (turno == 1) {
@@ -125,13 +144,6 @@ public class UnirsePartida extends HttpServlet {
                 psINS.executeUpdate();
                 psINS.close();
             }
-
-            // Actualizar la partida asignando al usuario como contrincante
-            String sqlUP = "UPDATE partida SET contrincante = ? WHERE IdPartida = ?";
-            PreparedStatement psUP = con.prepareStatement(sqlUP);
-            psUP.setInt(1, idUsuario);
-            psUP.setInt(2, idPartida);
-            int filasActualizadas = psUP.executeUpdate();
 
             // Cerrar recursos
             rsSEL.close();
